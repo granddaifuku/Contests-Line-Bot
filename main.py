@@ -16,11 +16,11 @@ app = Flask(__name__)
 
 PATH = './data/channel_info.json'
 
-with open(PATH) as f:
-    jsn = json.load(f)
+# with open(PATH) as f:
+#     jsn = json.load(f)
 
-CHANNEL_ACCESS_TOKEN = jsn['channel_access_token']
-CHANNEL_SECRET = jsn['channel_secret']
+# CHANNEL_ACCESS_TOKEN = jsn['channel_access_token']
+# CHANNEL_SECRET = jsn['channel_secret']
 
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
