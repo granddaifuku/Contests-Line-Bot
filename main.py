@@ -14,13 +14,13 @@ from linebot.models import (
 
 app = Flask(__name__)
 
-PATH = './data/channel_info.json'
+# PATH = './data/channel_info.json'
 
 # with open(PATH) as f:
 #     jsn = json.load(f)
 
-# CHANNEL_ACCESS_TOKEN = jsn['channel_access_token']
-# CHANNEL_SECRET = jsn['channel_secret']
+CHANNEL_ACCESS_TOKEN = os.environ.get('LINE_CHANNEL_ACCESS_TOKEN')
+CHANNEL_SECRET = os.environ.get('LINE_CHANNEL_SECRET')
 
 line_bot_api = LineBotApi(CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(CHANNEL_SECRET)
