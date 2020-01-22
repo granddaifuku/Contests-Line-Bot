@@ -19,3 +19,6 @@ This is the [Line](https://line.me/ja/) bot that tells you about the [AtCoder](h
 4. The bot recognize the word "コンテスト" (now only Katakana is available) and send you (or group) the information above
 
 Note: Currently bot is working on free plan, so you can't add the bot to your friends in Line App.
+
+## Related Link  
+- [Blog (日本語版の README はこちら)](https://granddaifuku.hatenablog.com/entry/2020/01/22/210601)
