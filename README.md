@@ -14,6 +14,8 @@ This is the [Line](https://line.me/ja/) bot that tells you about the [AtCoder](h
 
 ## How to use
 1. Install Line App
-2. Scan the QR code below
+2. Scan the QR code below (See the note below)
 3. Invite bot into the group or one-on-one talk room
 4. The bot recognize the word "コンテスト" (now only Katakana is available) and send you (or group) the information above
+
+Note: Currently bot is working on free plan, so you can't add the bot to your friends in Line App.
