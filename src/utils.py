@@ -6,12 +6,12 @@ import json
 AT_URL = 'https://atcoder.jp/contests/'
 CF_URL = 'https://codeforces.com/api/contest.list?gym=false'
 
-AT_TMP_PATH = './data/at_tmp.json'
-CF_TMP_PATH = './data/cf_tmp.json'
+AT_TMP_PATH = '../data/at_tmp.json'
+CF_TMP_PATH = '../data/cf_tmp.json'
 
-CONTESTS_NAME_TMP = './data/contests_name.json'
-CONTESTS_TIME_TMP = './data/contests_time.json'
-CONTESTS_RANGE_TMP = './data/contests_range.json'
+CONTESTS_NAME_TMP = '../data/contests_name.json'
+CONTESTS_TIME_TMP = '../data/contests_time.json'
+CONTESTS_RANGE_TMP = '../data/contests_range.json'
 
 
 def template_json_data(path):
