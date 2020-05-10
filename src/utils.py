@@ -142,3 +142,4 @@ def send_cf_info():
                 contents['body']['contents'][1]['contents'].append(contests_info)
     
     return contents
+    

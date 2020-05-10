@@ -15,7 +15,7 @@ from linebot.models import (
 
 app = Flask(__name__)
 
-# PATH = './data/channel_info.json'
+# PATH = '../data/channel_info.json'
 
 # with open(PATH) as f:
 #     jsn = json.load(f)
