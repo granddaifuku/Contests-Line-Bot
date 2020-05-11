@@ -95,7 +95,6 @@ def get_upcoming_cf_contests():
         s += ' - '
         s += end_time.strftime('%Y-%m-%d %H:%M:%S')
         res.insert(1, s)
-
     
     return res
 
@@ -142,4 +141,3 @@ def send_cf_info():
                 contents['body']['contents'][1]['contents'].append(contests_info)
     
     return contents
-    
