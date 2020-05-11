@@ -6,6 +6,9 @@ import json
 AT_URL = 'https://atcoder.jp/contests/'
 CF_URL = 'https://codeforces.com/api/contest.list?gym=false'
 
+AT_INFO_PATH = '../data/at_info.json'
+CF_INFO_PATH = '../data/cf_info.json'
+
 AT_TMP_PATH = '../data/at_tmp.json'
 CF_TMP_PATH = '../data/cf_tmp.json'
 
@@ -142,3 +145,48 @@ def send_cf_info():
                 contents['body']['contents'][1]['contents'].append(contests_info)
     
     return contents
+
+
+def format_ac_info():
+    res = []
+    data = get_upcoming_at_contests()
+    if len(data) == 0:
+        info = template_json_data(AT_INFO_PATH)
+        for i in info:
+            info[i] = '-'
+        res.append(info)
+    else:
+        for i in range(len(data) // 3):
+            info = template_json_data(AT_INFO_PATH)
+            index = 0
+            for j in info:
+                info[j] = data[i * 3 + index]
+                index = index + 1
+            res.append(info)
+    
+    return res
+
+
+def format_cf_info():
+    res = []
+    data = get_upcoming_cf_contests()
+    if len(data) == 0:
+        info = template_json_data(CF_INFO_PATH)
+        for i in info:
+            info[i] = '-'
+        res.append(info)
+    else:
+        for i in range(len(data) // 2):
+            info = template_json_data(CF_INFO_PATH)
+            index = 0
+            for j in info:
+                info[j] = data[i * 2 + index]
+                index = index + 1
+            res.append(info)
+
+    return res
+
+
+if __name__ == '__main__':
+    # print(get_upcoming_at_contests())
+    format_cf_info()
