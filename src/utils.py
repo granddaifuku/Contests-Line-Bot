@@ -146,7 +146,7 @@ def send_cf_info():
     return contents
 
 
-def format_ac_info():
+def format_at_info():
     res = []
     data = get_upcoming_at_contests()
     if len(data) == 0:
@@ -162,7 +162,6 @@ def format_ac_info():
                 info[j] = data[i * 3 + index]
                 index = index + 1
             res.append(info)
-    
     return res
 
 
@@ -187,5 +186,4 @@ def format_cf_info():
 
 
 if __name__ == '__main__':
-    # print(get_upcoming_at_contests())
-    format_cf_info()
+    print(format_at_info())

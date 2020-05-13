@@ -14,20 +14,27 @@ def get_connection():
 def update_at_table():
     sql_string = ''
     sql_string += 'DELETE FROM {};'.format(AT_TABLE)
-    data = utils.get_upcoming_at_contests()
+    data = utils.format_at_info()
+    for i in range(len(data)):
+        sql_string += 'INSERT INTO {0} (contest) VALUES (\'{1}\');'.format(AT_TABLE, data[i])
+    print(sql_string)
     execute(AT_TABLE)
 
 
 def update_cf_table():
     sql_string = ''
     sql_string += 'DELETE FROM {};'.format(CF_TABLE)
-    data = utils.get_upcoming_cf_contests()
+    data = utils.format_cf_info()
+    for i in range(len(data)):
+        sql_string += 'INSERT INTO {0} (contest) VALUES (\'{1}\');'.format(CF_TABLE, data[i])
+    print(sql_string)
     execute(CF_TABLE)
 
 
-def execute(table_name, query):
+def execute(query):
     conn = get_connection()
     cur = conn.cursor()
-    sql_string = 'INSERT INTO {}'.format(table_name)
-    cur.execute(sql_string)
     cur.execute(query)
+
+if __name__ == '__main__':
+    update_cf_table()
