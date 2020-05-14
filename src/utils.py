@@ -186,4 +186,4 @@ def format_cf_info():
 
 
 if __name__ == '__main__':
-    print(format_at_info())
+    print(get_upcoming_at_contests())
