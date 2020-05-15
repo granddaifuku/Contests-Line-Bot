@@ -19,7 +19,7 @@ def update_at_table():
     query += 'DELETE FROM {};'.format(AT_TABLE)
     data = utils.format_at_info()
     for i in range(len(data)):
-        query += 'INSERT INTO {0} (info) VALUES ({1});'.format(AT_TABLE, psycopg2.extras.Json(data[i]))
+        query += 'INSERT INTO {0} (name, time, range) VALUES (\'{1}\', \'{2}\', \'{3}\');'.format(AT_TABLE, data[i]['name'], data[i]['time'], data[i]['range'])
     execute(query)
 
 
@@ -28,13 +28,16 @@ def update_cf_table():
     query += 'DELETE FROM {};'.format(CF_TABLE)
     data = utils.format_cf_info()
     for i in range(len(data)):
-        query += 'INSERT INTO {0} (info) VALUES ({1});'.format(CF_TABLE, psycopg2.extras.Json(data[i]))
+        query += 'INSERT INTO {0} (name, time) VALUES (\'{1}\', \'{2}\');'.format(CF_TABLE, data[i]['name'], data[i]['time'])
     execute(query)
 
 
-def get_records(table_name):
+def get_records(table_name, range=True):
     query = ''
-    query += 'SELECT info FROM {};'.format(table_name)
+    if range:
+        query += 'SELECT name, time, range FROM {};'.format(table_name)
+    else:
+        query += 'SELECT name, time FROM {};'.format(table_name)
     res = execute(query, False)
     return res
 
@@ -46,7 +49,11 @@ def execute(query, Insert=True):
                 cur.execute(query)
                 conn.commit()
         else:
-            with conn.cursor(cursor_factory=DictCursor) as cur:
+            with conn.cursor(cursor_factory=psycopg2.extras.DictCursor) as cur:
                 cur.execute(query)
-                return cur.fetchall()
+                res = cur.fetchall()
+                return res
 
+
+if __name__ == '__main__':
+   get_records(AT_TABLE)
