@@ -1,8 +1,8 @@
-import utils
-import psycopg2
-import psycopg2.extras
 import json
 import os 
+import psycopg2
+import psycopg2.extras
+import utils
 
 from psycopg2.extras import DictCursor
 
@@ -10,8 +10,9 @@ AT_TABLE = 'at_db'
 CF_TABLE = 'cf_db'
 
 def get_connection():
+    db_url = os.environ.get('DATABASE_URL')
 
-    return psycopg2.connect(host='localhost', database='line_bot_db', user='yudaifuku', password='root')
+    return psycopg2.connect(db_url)
 
 
 def update_at_table():
@@ -39,6 +40,7 @@ def get_records(table_name, range=True):
     else:
         query += 'SELECT name, time FROM {};'.format(table_name)
     res = execute(query, False)
+
     return res
 
 
@@ -56,4 +58,5 @@ def execute(query, Insert=True):
 
 
 if __name__ == '__main__':
-   get_records(AT_TABLE)
+   update_at_table()
+   update_cf_table()

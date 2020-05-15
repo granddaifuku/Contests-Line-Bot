@@ -162,6 +162,7 @@ def send_cf_info():
 def format_at_info():
     res = []
     data = get_upcoming_at_contests()
+
     if len(data) == 0:
         info = template_json_data(AT_INFO_PATH)
         for i in info:
@@ -182,6 +183,7 @@ def format_at_info():
 def format_cf_info():
     res = []
     data = get_upcoming_cf_contests()
+
     if len(data) == 0:
         info = template_json_data(CF_INFO_PATH)
         for i in info:
@@ -197,7 +199,3 @@ def format_cf_info():
             res.append(info)
 
     return res
-
-
-if __name__ == '__main__':
-   send_at_info()
