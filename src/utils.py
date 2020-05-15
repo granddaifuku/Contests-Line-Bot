@@ -7,15 +7,15 @@ import db
 AT_URL = 'https://atcoder.jp/contests/'
 CF_URL = 'https://codeforces.com/api/contest.list?gym=false'
 
-AT_INFO_PATH = '../data/at_info.json'
-CF_INFO_PATH = '../data/cf_info.json'
+AT_INFO_PATH = '/app/data/at_info.json'
+CF_INFO_PATH = '/app/data/cf_info.json'
 
-AT_TMP_PATH = '../data/at_tmp.json'
-CF_TMP_PATH = '../data/cf_tmp.json'
+AT_TMP_PATH = '/app/data/at_tmp.json'
+CF_TMP_PATH = '/app/data/cf_tmp.json'
 
-CONTESTS_NAME_TMP = '../data/contests_name.json'
-CONTESTS_TIME_TMP = '../data/contests_time.json'
-CONTESTS_RANGE_TMP = '../data/contests_range.json'
+CONTESTS_NAME_TMP = '/app/data/contests_name.json'
+CONTESTS_TIME_TMP = '/app/data/contests_time.json'
+CONTESTS_RANGE_TMP = '/app/data/contests_range.json'
 
 
 def template_json_data(path):
