@@ -1,13 +1,12 @@
-import json
-import os 
+import os
 import psycopg2
 import psycopg2.extras
 import utils
 
-from psycopg2.extras import DictCursor
 
 AT_TABLE = 'at_db'
 CF_TABLE = 'cf_db'
+
 
 def get_connection():
     db_url = os.environ.get('DATABASE_URL')
@@ -20,7 +19,8 @@ def update_at_table():
     query += 'DELETE FROM {};'.format(AT_TABLE)
     data = utils.format_at_info()
     for i in range(len(data)):
-        query += 'INSERT INTO {0} (name, time, range) VALUES (\'{1}\', \'{2}\', \'{3}\');'.format(AT_TABLE, data[i]['name'], data[i]['time'], data[i]['range'])
+        query += 'INSERT INTO {0} (name, time, range) VALUES (\'{1}\', \'{2}\', \'{3}\');'.format(
+            AT_TABLE, data[i]['name'], data[i]['time'], data[i]['range'])
     execute(query)
 
 
@@ -29,7 +29,8 @@ def update_cf_table():
     query += 'DELETE FROM {};'.format(CF_TABLE)
     data = utils.format_cf_info()
     for i in range(len(data)):
-        query += 'INSERT INTO {0} (name, time) VALUES (\'{1}\', \'{2}\');'.format(CF_TABLE, data[i]['name'], data[i]['time'])
+        query += 'INSERT INTO {0} (name, time) VALUES (\'{1}\', \'{2}\');'.format(
+            CF_TABLE, data[i]['name'], data[i]['time'])
     execute(query)
 
 
@@ -58,5 +59,5 @@ def execute(query, Insert=True):
 
 
 if __name__ == '__main__':
-   update_at_table()
-   update_cf_table()
+    update_at_table()
+    update_cf_table()
