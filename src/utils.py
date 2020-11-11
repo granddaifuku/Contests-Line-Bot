@@ -1,8 +1,9 @@
-from bs4 import  BeautifulSoup
+from bs4 import BeautifulSoup
 import datetime
 import urllib.request
 import json
 import db
+import re
 
 AT_URL = 'https://atcoder.jp/contests/'
 CF_URL = 'https://codeforces.com/api/contest.list?gym=false'
@@ -21,11 +22,11 @@ CONTESTS_RANGE_TMP = '/app/data/contests_range.json'
 def template_json_data(path):
     with open(path) as f:
         jsn = json.load(f)
-    
+
     return jsn
 
 
-def get_data(url, scp = False):
+def get_data(url, scp=False):
     req = urllib.request.Request(url)
     try:
         with urllib.request.urlopen(req) as res:
@@ -72,8 +73,23 @@ def get_upcoming_at_contests():
                         break
                     s += t
                 start = datetime.datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
-                dur = datetime.datetime.strptime(text[i + 1], '%H:%M')
-                end = start + datetime.timedelta(hours=int(dur.strftime('%H')), minutes=int(dur.strftime('%M')))
+                split_time = re.split('[:]', text[i + 1])
+                dur_hour = int(split_time[0])
+                day = dur_hour // 24
+                hour = dur_hour % 24
+                minutes = int(split_time[1])
+                if day == 0:
+                    dur = datetime.datetime.strptime(text[i + 1], '%H:%M')
+                    end = start + \
+                        datetime.timedelta(hours=int(dur.strftime(
+                            '%H')), minutes=int(dur.strftime('%M')))
+                else:
+                    text[i + 1] = str(day) + ":" + \
+                        str(hour) + ":" + str(minutes)
+                    dur = datetime.datetime.strptime(text[i + 1], '%d:%H:%M')
+                    end = start + \
+                        datetime.timedelta(days=int(dur.strftime('%d')), hours=int(dur.strftime(
+                            '%H')), minutes=int(dur.strftime('%M')))
                 s += ' - '
                 s += end.strftime('%Y-%m-%d %H:%M:%S')
             text[i] = s
@@ -105,14 +121,14 @@ def get_upcoming_cf_contests():
         s += ' - '
         s += end_time.strftime('%Y-%m-%d %H:%M:%S')
         res.insert(1, s)
-    
+
     return res
 
 
 def send_at_info():
     contents = template_json_data(AT_TMP_PATH)
     data = db.get_records(db.AT_TABLE)
-        
+
     if len(data) == 0:
         for i in range(3):
             contents['body']['contents'][1]['contents'][i]['contents'][1]['text'] = '-'
@@ -129,10 +145,13 @@ def send_at_info():
                 contests_name['contents'][1]['text'] = data[i]['name']
                 contests_time['contents'][1]['text'] = data[i]['time']
                 contests_range['contents'][1]['text'] = data[i]['range']
-                contents['body']['contents'][1]['contents'].append(contests_name)
-                contents['body']['contents'][1]['contents'].append(contests_time)
-                contents['body']['contents'][1]['contents'].append(contests_range)
-        
+                contents['body']['contents'][1]['contents'].append(
+                    contests_name)
+                contents['body']['contents'][1]['contents'].append(
+                    contests_time)
+                contents['body']['contents'][1]['contents'].append(
+                    contests_range)
+
     return contents
 
 
@@ -153,9 +172,11 @@ def send_cf_info():
                 contests_time = template_json_data(CONTESTS_TIME_TMP)
                 contests_name['contents'][1]['text'] = data[i]['name']
                 contests_time['contents'][1]['text'] = data[i]['time']
-                contents['body']['contents'][1]['contents'].append(contests_name)
-                contents['body']['contents'][1]['contents'].append(contests_time)
-    
+                contents['body']['contents'][1]['contents'].append(
+                    contests_name)
+                contents['body']['contents'][1]['contents'].append(
+                    contests_time)
+
     return contents
 
 
@@ -199,3 +220,7 @@ def format_cf_info():
             res.append(info)
 
     return res
+
+
+if __name__ == "__main__":
+    get_upcoming_at_contests()

@@ -23,3 +23,11 @@ This is the [Line](https://line.me/ja/) bot that tells you about the [AtCoder](h
 
 ## 日本語版 README
 [競プロの日程を通知する Line Bot を作った話](https://granddaifuku.hatenablog.com/entry/2020/01/22/210601)  
+
+## Contribute
+### Coding environment
+1. Clone this repository  
+2. Create and activate virtual env  
+3. Import pip modules using `requirements.txt`  
+4. Write some code  
+
