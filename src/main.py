@@ -2,6 +2,7 @@ from flask import Flask, request, abort
 import os
 import atcoder
 import codeforces
+import yukicoder
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -55,6 +56,11 @@ def handle_message(event):
         alt_text='hello',
         contents=at_data
     )
+    yk_data = yukicoder.send_yk_info()
+    yk_message = FlexSendMessage(
+        alt_text='hello',
+        contents=yk_data
+    )
 
     try:
         line_bot_api.push_message(
@@ -63,6 +69,9 @@ def handle_message(event):
         line_bot_api.push_message(
             to,
             messages=at_message)
+        line_bot_api.push_message(
+            to,
+            messages=yk_message)
     except LineBotApiError:
         print('Failed to Send Contests Information')
 
