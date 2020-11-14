@@ -74,3 +74,4 @@ def execute(query, Insert=True):
 if __name__ == '__main__':
     update_at_table()
     update_cf_table()
+    update_yk_table()
