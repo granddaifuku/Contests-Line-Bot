@@ -75,7 +75,3 @@ def format_yk_info():
             res.append(info)
 
     return res
-
-
-if __name__ == "__main__":
-    get_upcoming_yukicoder_contests()
