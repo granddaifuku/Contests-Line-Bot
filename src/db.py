@@ -43,7 +43,7 @@ def update_yk_table():
     data = yukicoder.format_yk_info()
     for i in range(len(data)):
         query += 'INSERT INTO {0} (name, time) VALUES (\'{1}\', \'{2}\');'.format(
-            CF_TABLE, data[i]['name'], data[i]['time'])
+            YK_TABLE, data[i]['name'], data[i]['time'])
     execute(query)
 
 
