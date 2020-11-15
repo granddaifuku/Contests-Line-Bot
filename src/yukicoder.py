@@ -60,7 +60,7 @@ def format_yk_info():
     res = []
     data = get_upcoming_yukicoder_contests()
 
-    if len(data == 0):
+    if len(data) == 0:
         info = utils.template_json_data(YK_INFO_PATH)
         for i in info:
             info[i] = '-'
