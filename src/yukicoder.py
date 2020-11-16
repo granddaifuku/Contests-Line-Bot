@@ -13,7 +13,8 @@ def get_upcoming_yukicoder_contests():
         print("No contents to display")
         return
     res = []
-    for contest in contests:
+    contests_sorted = sorted(contests, key=lambda x: x['Date'])
+    for contest in contests_sorted:
         name = contest['Name']
         start = datetime.datetime.fromisoformat(
             contest['Date']).replace(tzinfo=None)
@@ -23,8 +24,8 @@ def get_upcoming_yukicoder_contests():
         s += datetime.datetime.strftime(start, '%Y-%m-%d %H:%M:%S')
         s += ' - '
         s += datetime.datetime.strftime(end, '%Y-%m-%d %H:%M:%S')
-        res.insert(0, name)
-        res.insert(1, s)
+        res.append(name)
+        res.append(s)
 
     return res
 
