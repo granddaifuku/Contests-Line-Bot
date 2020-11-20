@@ -1,7 +1,7 @@
 # Competitive programming Information Bot
 
 ## About
-This is the [Line](https://line.me/ja/) bot that tells you about the [AtCoder](https://atcoder.jp/?lang=ja) and [Codeforces](https://codeforces.com/) [yukicoder](https://yukicoder.me/) contests.
+This is the [Line](https://line.me/ja/) bot that tells you about the [AtCoder](https://atcoder.jp/?lang=ja) and [Codeforces](https://codeforces.com/), [yukicoder](https://yukicoder.me/) contests.
 
 ## Informated Contents
 - AtCoder
@@ -10,7 +10,10 @@ This is the [Line](https://line.me/ja/) bot that tells you about the [AtCoder](h
   - Rated Range
 - Codeforces
   - Contests Name
-  - Contests Start and End time
+  - Contests Start and End time  
+- yukicoder  
+  - Contests Name  
+  - Contests Start and End time  
 
 ## How to use
 1. Install Line App
