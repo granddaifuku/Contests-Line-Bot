@@ -1,7 +1,7 @@
 # Competitive programming Information Bot
 
 ## About
-This is the [Line](https://line.me/ja/) bot that tells you about the [AtCoder](https://atcoder.jp/?lang=ja) and [Codeforces](https://codeforces.com/) contests.
+This is the [Line](https://line.me/ja/) bot that tells you about the [AtCoder](https://atcoder.jp/?lang=ja) and [Codeforces](https://codeforces.com/) [yukicoder](https://yukicoder.me/) contests.
 
 ## Informated Contents
 - AtCoder
