@@ -13,10 +13,7 @@ func NewAtCoderInfo(
 	name string,
 	startTime time.Time,
 	endTime time.Time,
-	ratedRangeBegin int,
-	ratedRangeEnd int,
+	ratedRange string,
 ) AtcoderInfo {
-	if ratedRangeBegin == -1 {
-
-	}
+	return AtcoderInfo{Name: name, StartTime: startTime, EndTime: endTime, RatedRange: ratedRange}
 }
