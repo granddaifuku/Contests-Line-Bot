@@ -26,12 +26,13 @@ func NewContestService() ContestService {
 	}
 }
 
-func (cs contestService) CallGetApi(url string, body *interface{}) error {
+func (cs contestService) CallGetApi(url string, body interface{}) error {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return err
 	}
 	// Make http request
+	// TODO: define errors
 	res, err := cs.client.Do(req)
 	if err != nil {
 		return err
@@ -76,15 +77,10 @@ func (cs contestService) FetchAtcoderInfo() ([]domain.AtcoderInfo, error) {
 func (cs contestService) FetchCodeforcesInfo() ([]domain.CodeforcesInfo, error) {
 	var info []domain.CodeforcesInfo
 	// Call Codeforces' contests information api
-	req, err := http.NewRequest("GET", consts.CodeforcesURL, nil)
+	err := cs.CallGetApi(consts.CodeforcesURL, &info)
 	if err != nil {
 		return nil, err
 	}
-	res, err := cs.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
 
 	return info, nil
 }
@@ -92,15 +88,10 @@ func (cs contestService) FetchCodeforcesInfo() ([]domain.CodeforcesInfo, error) 
 func (cs contestService) FetchYukicoderInfo() ([]domain.YukicoderInfo, error) {
 	var info []domain.YukicoderInfo
 	// Call Yukicoder's future contests api
-	req, err := http.NewRequest("GET", consts.YukicoderURL, nil)
+	err := cs.CallGetApi(consts.YukicoderURL, &info)
 	if err != nil {
 		return nil, err
 	}
-	res, err := cs.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
 
-	return info, nil
+	return info, err
 }
