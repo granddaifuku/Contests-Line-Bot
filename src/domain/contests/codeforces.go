@@ -20,7 +20,6 @@ type CodeforcesInfo struct {
 }
 
 func NewCodeforcesInfo(ca *CodeforcesApiResult) CodeforcesInfo {
-	jst := time.FixedZone("Asia/Tokyo", 9*60*60)
 	startTime := time.Unix(int64(ca.StartTimeSeconds), 0).In(jst)
 	endTime := startTime.Add(time.Duration(ca.DurationSeconds) * time.Second).In(jst)
 	return CodeforcesInfo{Name: ca.Name, StartTime: startTime, EndTime: endTime}
