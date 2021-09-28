@@ -1,8 +1,10 @@
 package domain
 
-import "time"
+import (
+	"time"
+)
 
-type YukicoderInfo struct {
+type YukicoderInfo []struct {
 	Name      string    `json:"Name"`
 	StartTime time.Time `json:"Date"`
 	EndTime   time.Time `json:"EndDate"`
