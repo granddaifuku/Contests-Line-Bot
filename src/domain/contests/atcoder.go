@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/granddaifuku/contest_line_bot/src/internal/consts"
 	"golang.org/x/xerrors"
 )
 
@@ -25,17 +24,21 @@ func NewAtCoderInfo(
 	ratedRange string,
 ) (AtcoderInfo, error) {
 	info := &AtcoderInfo{}
+	timeFormat := "2006-01-02 15:04:05"
 	tz := "+0900"
+
 	// Delete the timezone suffix
 	if !strings.HasSuffix(start, tz) {
-		return *info, xerrors.New("Error duration has no timezone suffix")
+		return *info, xerrors.New("Error Duration has No Timezone Suffix")
 	}
 	start = strings.TrimSuffix(start, tz)
-	dur := strings.Split(duration, ":") // Separate duratino to hours and minutes
-	startTime, err := time.ParseInLocation(consts.TimeLayout, start, jst)
+
+	startTime, err := time.ParseInLocation(timeFormat, start, jst)
 	if err != nil {
 		return *info, xerrors.Errorf("Error when Parsing Start Time: %w", err)
 	}
+
+	dur := strings.Split(duration, ":") // Separate duration to hours and minutes
 	hours, err := strconv.Atoi(dur[0])
 	if err != nil {
 		return *info, xerrors.Errorf("Error when Converting String Hours to Int: %w", err)

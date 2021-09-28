@@ -83,8 +83,8 @@ func TestNewAtcoderInfo(t *testing.T) {
 			if err != nil {
 				return
 			}
-			if diff := cmp.Diff(tt.want, got); diff != "" {
-				t.Errorf("NewAtcoderInfo() Failed (-want +got):\n%s", diff)
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("NewAtcoderInfo() returned invalid results (-got +want):\n%s", diff)
 			}
 		})
 	}
