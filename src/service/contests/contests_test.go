@@ -16,17 +16,57 @@ var jst = time.FixedZone("Azia/Tokyo", 9*60*60)
 
 func TestFetchAtcoderInfo(t *testing.T) {
 	r, err := recorder.New("../../../fixtures/service/contests/fetch_atcoder_info")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 	defer r.Stop()
+	want := []domain.AtcoderInfo{
+		{
+			Name:       "AtCoder Beginner Contest 221",
+			StartTime:  time.Date(2021, 10, 2, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2021, 10, 2, 22, 40, 0, 0, jst),
+			RatedRange: " ~ 1999",
+		},
+		{
+			Name:       "エクサウィザーズプログラミングコンテスト2021（AtCoder Beginner Contest 222）",
+			StartTime:  time.Date(2021, 10, 9, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2021, 10, 9, 22, 40, 0, 0, jst),
+			RatedRange: " ~ 1999",
+		},
+		{
+			Name:       "デジタルの日特別イベント「HACK TO THE FUTURE for Youth+」",
+			StartTime:  time.Date(2021, 10, 10, 13, 30, 0, 0, jst),
+			EndTime:    time.Date(2021, 10, 10, 17, 30, 0, 0, jst),
+			RatedRange: "-",
+		},
+		{
+			Name:       "デジタルの日特別イベント「HACK TO THE FUTURE for Youth+」 open",
+			StartTime:  time.Date(2021, 10, 10, 13, 30, 0, 0, jst),
+			EndTime:    time.Date(2021, 10, 10, 17, 30, 0, 0, jst),
+			RatedRange: "-",
+		},
+		{
+			Name:       "大和証券プログラミングコンテスト2021（AtCoder Regular Contest 128）",
+			StartTime:  time.Date(2021, 10, 16, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2021, 10, 16, 23, 0, 0, 0, jst),
+			RatedRange: " ~ 2799",
+		},
+		{
+			Name:       "AtCoder Grand Contest 055",
+			StartTime:  time.Date(2021, 10, 31, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2021, 10, 31, 23, 30, 0, 0, jst),
+			RatedRange: "1200 ~ ",
+		},
+	}
+	cs := &contestService{client: &http.Client{Transport: r}}
+	got, err := cs.FetchAtcoderInfo()
+	assert.Nil(t, err)
+	if diff := cmp.Diff(got, want); diff != "" {
+		t.Errorf("contestService.FetchAtcoderInfo() returned invalid results (-got +want):\n %s", diff)
+	}
 }
 
 func TestFetchCodeforcesInfo(t *testing.T) {
 	r, err := recorder.New("../../../fixtures/service/contests/fetch_codeforces_info")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 	defer r.Stop()
 	want := []domain.CodeforcesInfo{
 		{
@@ -127,11 +167,10 @@ func TestFetchCodeforcesInfo(t *testing.T) {
 	}
 	cs := &contestService{client: &http.Client{Transport: r}}
 	got, err := cs.FetchCodeforcesInfo()
+	assert.Nil(t, err)
 	sort.SliceStable(want, func(i, j int) bool { return want[i].Name < want[j].Name })
 	sort.SliceStable(got, func(i, j int) bool { return got[i].Name < got[j].Name })
-	if err != nil {
-		t.Fatal(err)
-	}
+
 	if diff := cmp.Diff(got, want); diff != "" {
 		t.Errorf("contestService.FetchCodeforcesInfo() returned invalid results (-got +want):\n %s", diff)
 	}
@@ -139,9 +178,7 @@ func TestFetchCodeforcesInfo(t *testing.T) {
 
 func TestFetchYukicoderInfo(t *testing.T) {
 	r, err := recorder.New("../../../fixtures/service/contests/fetch_yukicoder_info")
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 	defer r.Stop()
 	want := domain.YukicoderInfo{
 		{
@@ -177,9 +214,7 @@ func TestFetchYukicoderInfo(t *testing.T) {
 	}
 	cs := &contestService{client: &http.Client{Transport: r}}
 	got, err := cs.FetchYukicoderInfo()
-	if err != nil {
-		t.Fatal(err)
-	}
+	assert.Nil(t, err)
 	if diff := cmp.Diff(got, want); diff != "" {
 		t.Errorf("contestService.FetchYukicoderInfo() returned invalid results (-got +want):\n %s", diff)
 	}
@@ -195,9 +230,7 @@ func TestMakeGetRequest(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r, err := recorder.New("../../../fixtures/service/contests/" + tt.fixturePath)
-			if err != nil {
-				t.Fatal(err)
-			}
+			assert.Nil(t, err)
 			defer r.Stop()
 			cs := &contestService{client: &http.Client{Transport: r}}
 			got, err := cs.makeGetRequest(tt.arg)
@@ -272,6 +305,22 @@ func TestArrangeAtcoderInfo(t *testing.T) {
 		want []string
 	}{
 		{
+			name: "Success",
+			arg: `2021-10-02 21:00:00+0900
+				
+					◉
+					AtCoder Beginner Contest 221
+				
+				01:40
+				 ~ 1999`,
+			want: []string{
+				"2021-10-02 21:00:00+0900",
+				"AtCoder Beginner Contest 221",
+				"01:40",
+				" ~ 1999",
+			},
+		},
+		{
 			name: "No \"◉\" in the text",
 			arg: `
 			2021-10-02 21:00:00+0900
@@ -291,7 +340,7 @@ func TestArrangeAtcoderInfo(t *testing.T) {
 			name: "No delimiters in the text",
 			arg:  "2021-10-02 21:00:00+0900◉AtCoder Beginner Contest 22101:40~ 1999",
 			want: []string{
-				"2021-10-02 21:00:00+0900◉AtCoder Beginner Contest 22101:40~ 1999",
+				"2021-10-02 21:00:00+0900AtCoder Beginner Contest 22101:40~ 1999",
 			},
 		},
 	}

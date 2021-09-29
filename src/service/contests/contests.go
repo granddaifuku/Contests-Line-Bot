@@ -36,16 +36,7 @@ func NewContestService(client *http.Client) ContestService {
 }
 
 func (cs *contestService) FetchAtcoderInfo() ([]domain.AtcoderInfo, error) {
-	var info []domain.AtcoderInfo
-	// req, err := http.NewRequest("GET", consts.AtcoderURL, nil)
-	// if err != nil {
-	// 	return nil, xerrors.Errorf("Error when Creating Request: %w", err)
-	// }
-	// res, err := cs.client.Do(req)
-	// if err != nil {
-	// 	return nil, xerrors.Errorf("Error when Making Http Request: %w", err)
-	// }
-	// defer res.Body.Close()
+	info := make([]domain.AtcoderInfo, 0)
 	body, err := cs.makeGetRequest(consts.AtcoderURL)
 	if err != nil {
 		return nil, xerrors.Errorf("Error when Calling Api: %w", err)
@@ -61,8 +52,8 @@ func (cs *contestService) FetchAtcoderInfo() ([]domain.AtcoderInfo, error) {
 	scraped := doc.Find("div#contest-table-upcoming > div.panel > div.table-responsive > table.table > tbody > tr").Text()
 
 	splited := cs.arrangeAtcoderInfo(scraped)
-	for i := range splited {
-		// Devide the slice every 4 elements.
+	// Devide the slice every 4 elements.
+	for i := 0; i < len(splited); i += 4 {
 		startTime := splited[i]
 		name := splited[i+1]
 		duration := splited[i+2]
@@ -72,7 +63,6 @@ func (cs *contestService) FetchAtcoderInfo() ([]domain.AtcoderInfo, error) {
 			return nil, xerrors.Errorf("Error when Building AtCoder Info: %w", err)
 		}
 		info = append(info, at)
-		i += 3
 	}
 
 	return info, nil
@@ -103,7 +93,7 @@ func (cs *contestService) FetchCodeforcesInfo() ([]domain.CodeforcesInfo, error)
 }
 
 func (cs *contestService) FetchYukicoderInfo() (domain.YukicoderInfo, error) {
-	var info domain.YukicoderInfo
+	info := make(domain.YukicoderInfo, 0)
 	// Call Yukicoder's future contests api
 	body, err := cs.makeGetRequest(consts.YukicoderURL)
 	if err != nil {
@@ -113,27 +103,9 @@ func (cs *contestService) FetchYukicoderInfo() (domain.YukicoderInfo, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("Error when Calling Decoding Function: %w", err)
 	}
-	//	cs.formatYukicoderInfo(info)
 
 	return info, nil
 }
-
-// Convert Time format from ISO to 2006-01-02 15:04:05
-// func (cs *contestService) formatYukicoderInfo(info domain.YukicoderInfo) error {
-// 	for _, v := range info {
-// 		startTime, err := time.Parse("2006-01-02 15:04:05", fmt.Sprint(v.StartTime))
-// 		if err != nil {
-// 			return xerrors.Errorf("Error when Parsing Converting Start Time Format: %w", err)
-// 		}
-// 		endTime, err := time.Parse("2006-01-02 15:04:05", fmt.Sprint(v.EndTime))
-// 		if err != nil {
-// 			return xerrors.Errorf("Error when Parsing Converting End Time Format: %w", err)
-// 		}
-// 		v.StartTime = startTime
-// 		v.EndTime = endTime
-// 	}
-// 	return nil
-// }
 
 func (cs *contestService) makeGetRequest(url string) ([]byte, error) {
 	req, err := http.NewRequest("GET", url, nil)
@@ -171,7 +143,7 @@ func (cs *contestService) decodeJson(body []byte, target interface{}) error {
 // Arrange Scraped AtCoder Information
 func (cs *contestService) arrangeAtcoderInfo(text string) []string {
 	// Remove unnecessary elements
-	strings.ReplaceAll(text, "◉", "")
+	text = strings.ReplaceAll(text, "◉", "")
 
 	// Closure to split the scraped text
 	f := func(c rune) bool {
