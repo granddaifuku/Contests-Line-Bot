@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/granddaifuku/contest_line_bot/src/internal/consts"
 	"golang.org/x/xerrors"
 )
 
@@ -24,7 +25,6 @@ func NewAtCoderInfo(
 	ratedRange string,
 ) (AtcoderInfo, error) {
 	info := &AtcoderInfo{}
-	timeFormat := "2006-01-02 15:04:05"
 	tz := "+0900"
 
 	// Delete the timezone suffix
@@ -33,7 +33,7 @@ func NewAtCoderInfo(
 	}
 	start = strings.TrimSuffix(start, tz)
 
-	startTime, err := time.ParseInLocation(timeFormat, start, jst)
+	startTime, err := time.ParseInLocation(consts.TimeFormat, start, jst)
 	if err != nil {
 		return *info, xerrors.Errorf("Error when Parsing Start Time: %w", err)
 	}
