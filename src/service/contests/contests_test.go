@@ -9,31 +9,17 @@ import (
 	"github.com/dnaeon/go-vcr/v2/recorder"
 	"github.com/google/go-cmp/cmp"
 	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
+	"github.com/stretchr/testify/assert"
 )
 
 var jst = time.FixedZone("Azia/Tokyo", 9*60*60)
 
-func TestMakeGetRequest(t *testing.T) {
-	tests := []struct {
-		name        string
-		arg         string
-		fixturePath string
-		want        []byte
-	}{}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r, err := recorder.New("../../../fixtures/service/contests/" + tt.fixturePath)
-			if err != nil {
-				t.Fatal(err)
-			}
-			defer r.Stop()
-			cs := &contestService{client: &http.Client{Transport: r}}
-			got, err := cs.makeGetRequest(tt.arg)
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("contestService.makeGetRequest() returned invalid results (-got +want):\n %s", diff)
-			}
-		})
+func TestFetchAtcoderInfo(t *testing.T) {
+	r, err := recorder.New("../../../fixtures/service/contests/fetch_atcoder_info")
+	if err != nil {
+		t.Fatal(err)
 	}
+	defer r.Stop()
 }
 
 func TestFetchCodeforcesInfo(t *testing.T) {
@@ -196,5 +182,126 @@ func TestFetchYukicoderInfo(t *testing.T) {
 	}
 	if diff := cmp.Diff(got, want); diff != "" {
 		t.Errorf("contestService.FetchYukicoderInfo() returned invalid results (-got +want):\n %s", diff)
+	}
+}
+
+func TestMakeGetRequest(t *testing.T) {
+	tests := []struct {
+		name        string
+		arg         string
+		fixturePath string
+		want        []byte
+	}{}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r, err := recorder.New("../../../fixtures/service/contests/" + tt.fixturePath)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer r.Stop()
+			cs := &contestService{client: &http.Client{Transport: r}}
+			got, err := cs.makeGetRequest(tt.arg)
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("contestService.makeGetRequest() returned invalid results (-got +want):\n %s", diff)
+			}
+		})
+	}
+}
+
+func TestDecodeJson(t *testing.T) {
+	type Cat struct {
+		Name     string   `json:"name"`
+		Age      int      `json:"age"`
+		Siblings []string `json:"siblings"`
+	}
+	type args struct {
+		body   []byte
+		target Cat
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    Cat
+		wantErr bool
+	}{
+		{
+			name: "Success",
+			args: args{
+				body:   []byte(`{"name":"Haru","age":1,"siblings":["Hime"]}`),
+				target: Cat{},
+			},
+			want: Cat{
+				Name: "Haru",
+				Age:  1,
+				Siblings: []string{
+					"Hime",
+				},
+			},
+			wantErr: false,
+		},
+		{
+			name: "Cannot unmarshal json data",
+			args: args{
+				body:   []byte(`{"name""Haru","age":1,"siblings":["Hime"]}`),
+				target: Cat{},
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cs := &contestService{}
+			err := cs.decodeJson(tt.args.body, &tt.args.target)
+			if tt.wantErr {
+				assert.Error(t, err)
+				return
+			}
+			assert.Nil(t, err)
+			if diff := cmp.Diff(tt.args.target, tt.want); diff != "" {
+				t.Errorf("contestService.decodeJson() do not work properly (-got, +want):\n %s", diff)
+			}
+		})
+	}
+}
+
+func TestArrangeAtcoderInfo(t *testing.T) {
+	tests := []struct {
+		name string
+		arg  string
+		want []string
+	}{
+		{
+			name: "No \"◉\" in the text",
+			arg: `
+			2021-10-02 21:00:00+0900
+			
+			AtCoder Beginner Contest 221
+				
+			01:40
+				 ~ 1999`,
+			want: []string{
+				"2021-10-02 21:00:00+0900",
+				"AtCoder Beginner Contest 221",
+				"01:40",
+				" ~ 1999",
+			},
+		},
+		{
+			name: "No delimiters in the text",
+			arg:  "2021-10-02 21:00:00+0900◉AtCoder Beginner Contest 22101:40~ 1999",
+			want: []string{
+				"2021-10-02 21:00:00+0900◉AtCoder Beginner Contest 22101:40~ 1999",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			cs := &contestService{}
+			got := cs.arrangeAtcoderInfo(tt.arg)
+			if diff := cmp.Diff(got, tt.want); diff != "" {
+				t.Errorf("contestsService.arrangeAtcoderInfo() returned invalid results (-got +want):\n %s", diff)
+			}
+		})
 	}
 }

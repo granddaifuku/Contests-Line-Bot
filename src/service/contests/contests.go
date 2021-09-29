@@ -35,39 +35,6 @@ func NewContestService(client *http.Client) ContestService {
 	}
 }
 
-func (cs *contestService) makeGetRequest(url string) ([]byte, error) {
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, xerrors.Errorf("Error when Creating Request: %w", err)
-	}
-	// Make http request
-	res, err := cs.client.Do(req)
-	if err != nil {
-		return nil, xerrors.Errorf("Error when Making Http Request: %w", err)
-	}
-	defer res.Body.Close()
-
-	if res.StatusCode != http.StatusOK {
-		return nil, xerrors.Errorf("Http Status is not OK. Code: %v", res.StatusCode)
-
-	}
-
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, xerrors.Errorf("Error when Reading Response Body: %w", err)
-	}
-
-	return body, nil
-}
-
-func (cs contestService) decodeJson(body []byte, target interface{}) error {
-	if err := json.Unmarshal(body, &target); err != nil {
-		return xerrors.Errorf("Error when Decoding Json: %w", err)
-	}
-
-	return nil
-}
-
 func (cs *contestService) FetchAtcoderInfo() ([]domain.AtcoderInfo, error) {
 	var info []domain.AtcoderInfo
 	// req, err := http.NewRequest("GET", consts.AtcoderURL, nil)
@@ -92,12 +59,8 @@ func (cs *contestService) FetchAtcoderInfo() ([]domain.AtcoderInfo, error) {
 
 	// Dive into the upcoming contests inforamtion
 	scraped := doc.Find("div#contest-table-upcoming > div.panel > div.table-responsive > table.table > tbody > tr").Text()
-	strings.ReplaceAll(scraped, "◉", "") // Remove unnecessary elements
-	// Closure to split the scraped text
-	f := func(c rune) bool {
-		return !unicode.IsPrint(c)
-	}
-	splited := strings.FieldsFunc(scraped, f)
+
+	splited := cs.arrangeAtcoderInfo(scraped)
 	for i := range splited {
 		// Devide the slice every 4 elements.
 		startTime := splited[i]
@@ -171,3 +134,49 @@ func (cs *contestService) FetchYukicoderInfo() (domain.YukicoderInfo, error) {
 // 	}
 // 	return nil
 // }
+
+func (cs *contestService) makeGetRequest(url string) ([]byte, error) {
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, xerrors.Errorf("Error when Creating Request: %w", err)
+	}
+	// Make http request
+	res, err := cs.client.Do(req)
+	if err != nil {
+		return nil, xerrors.Errorf("Error when Making Http Request: %w", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return nil, xerrors.Errorf("Http Status is not OK. Code: %v", res.StatusCode)
+
+	}
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, xerrors.Errorf("Error when Reading Response Body: %w", err)
+	}
+
+	return body, nil
+}
+
+func (cs *contestService) decodeJson(body []byte, target interface{}) error {
+	if err := json.Unmarshal(body, &target); err != nil {
+		return xerrors.Errorf("Error when Decoding Json: %w", err)
+	}
+
+	return nil
+}
+
+// Arrange Scraped AtCoder Information
+func (cs *contestService) arrangeAtcoderInfo(text string) []string {
+	// Remove unnecessary elements
+	strings.ReplaceAll(text, "◉", "")
+
+	// Closure to split the scraped text
+	f := func(c rune) bool {
+		return !unicode.IsPrint(c)
+	}
+
+	return strings.FieldsFunc(text, f)
+}
