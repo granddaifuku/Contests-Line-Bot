@@ -17,7 +17,7 @@ import (
 type ContestService interface {
 	FetchAtcoderInfo() ([]domain.AtcoderInfo, error)
 	FetchCodeforcesInfo() ([]domain.CodeforcesInfo, error)
-	FetchYukicoderInfo() (domain.YukicoderInfo, error)
+	FetchYukicoderInfo() ([]domain.YukicoderInfo, error)
 }
 
 type contestService struct {
@@ -92,8 +92,8 @@ func (cs *contestService) FetchCodeforcesInfo() ([]domain.CodeforcesInfo, error)
 	return info, nil
 }
 
-func (cs *contestService) FetchYukicoderInfo() (domain.YukicoderInfo, error) {
-	info := make(domain.YukicoderInfo, 0)
+func (cs *contestService) FetchYukicoderInfo() ([]domain.YukicoderInfo, error) {
+	info := make([]domain.YukicoderInfo, 0)
 	// Call Yukicoder's future contests api
 	body, err := cs.makeGetRequest(consts.YukicoderURL)
 	if err != nil {
