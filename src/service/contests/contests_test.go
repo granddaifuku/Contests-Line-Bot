@@ -1,6 +1,7 @@
 package service
 
 import (
+	"log"
 	"net/http"
 	"sort"
 	"testing"
@@ -16,7 +17,9 @@ var jst = time.FixedZone("Azia/Tokyo", 9*60*60)
 
 func TestFetchAtcoderInfo(t *testing.T) {
 	r, err := recorder.New("../../../fixtures/service/contests/fetch_atcoder_info")
-	assert.Nil(t, err)
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer r.Stop()
 	want := []domain.AtcoderInfo{
 		{
@@ -66,7 +69,9 @@ func TestFetchAtcoderInfo(t *testing.T) {
 
 func TestFetchCodeforcesInfo(t *testing.T) {
 	r, err := recorder.New("../../../fixtures/service/contests/fetch_codeforces_info")
-	assert.Nil(t, err)
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer r.Stop()
 	want := []domain.CodeforcesInfo{
 		{
@@ -178,7 +183,9 @@ func TestFetchCodeforcesInfo(t *testing.T) {
 
 func TestFetchYukicoderInfo(t *testing.T) {
 	r, err := recorder.New("../../../fixtures/service/contests/fetch_yukicoder_info")
-	assert.Nil(t, err)
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer r.Stop()
 	want := []domain.YukicoderInfo{
 		{
@@ -230,7 +237,9 @@ func TestMakeGetRequest(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r, err := recorder.New("../../../fixtures/service/contests/" + tt.fixturePath)
-			assert.Nil(t, err)
+			if err != nil {
+				log.Fatal(err)
+			}
 			defer r.Stop()
 			cs := &contestService{client: &http.Client{Transport: r}}
 			got, err := cs.makeGetRequest(tt.arg)
