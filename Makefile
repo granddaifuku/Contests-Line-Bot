@@ -6,7 +6,7 @@ build:
 test:
 	docker compose up -d --build db
 	sleep 3 # Sleep for 3 seconds to ensure the db connection
-	go test ./...
+	source ./src/tests/envs.sh && go test ./... -v -cover -count=1
 
 down:
 	docker compose down --rmi all --volumes --remove-orphans
