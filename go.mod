@@ -13,6 +13,8 @@ require (
 require (
 	github.com/andybalholm/cascadia v1.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/kelseyhightower/envconfig v1.4.0 // indirect
+	github.com/lib/pq v1.10.3 // indirect
 	github.com/line/line-bot-sdk-go/v7 v7.10.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/net v0.0.0-20210614182718-04defd469f4e // indirect
