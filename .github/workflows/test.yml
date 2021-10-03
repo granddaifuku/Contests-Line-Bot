@@ -19,5 +19,9 @@ jobs:
         run: go get -v -t -d ./...
 
       - name: Test code
+        env:
+          "DB_USER_NAME": "postgres"
+          "DB_PASSWORD": "password"
+          "DB_PORT": "5432"
+          "DB_NAME": "test"
         run: go test -v ./...
-    
