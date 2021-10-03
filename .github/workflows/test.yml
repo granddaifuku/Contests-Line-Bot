@@ -27,11 +27,11 @@ jobs:
         with:
           go-versino: 1.16
 
-      - name: init DB
-        run: psql -f ./config/init.sql postgres://postgres:password@localhost:5432/test
-
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: init DB
+        run: psql -f ./config/init.sql postgres://postgres:password@localhost:5432/test
 
       - name: Get dependencies
         run: go get -v -t -d ./...
