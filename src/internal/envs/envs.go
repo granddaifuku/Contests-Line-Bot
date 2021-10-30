@@ -6,10 +6,12 @@ import (
 )
 
 type Env struct {
-	UserName string `envconfig:"DB_USER_NAME" required:"true"`
-	Password string `envconfig:"DB_PASSWORD" required:"true"`
-	Port     string `envconfig:"DB_PORT" required:"true"`
-	Name     string `envconfig:"DB_NAME" required:"true"`
+	UserName      string `envconfig:"DB_USER_NAME" required:"true"`
+	Password      string `envconfig:"DB_PASSWORD" required:"true"`
+	Port          string `envconfig:"DB_PORT" required:"true"`
+	Name          string `envconfig:"DB_NAME" required:"true"`
+	ChannelSecret string `envconfig:"LINE_CHANNEL_SECRET" required:"true"`
+	ChannelToken  string `envconfig:"LINE_CHANEEL_TOKEN" required:"true"`
 }
 
 func LoadEnv() (*Env, error) {

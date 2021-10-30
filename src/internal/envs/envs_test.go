@@ -11,10 +11,12 @@ import (
 func TestLoadEnv(t *testing.T) {
 	// Success Pattern
 	want := &Env{
-		UserName: "postgres",
-		Password: "password",
-		Port:     "5432",
-		Name:     "test",
+		UserName:      "postgres",
+		Password:      "password",
+		Port:          "5432",
+		Name:          "test",
+		ChannelSecret: "dummy_channel_secret",
+		ChannelToken:  "dummy_channle_token",
 	}
 	got, err := LoadEnv()
 	assert.Nil(t, err)

@@ -9,4 +9,6 @@ const (
 
 	TitleColor   = "#aaaaaa"
 	ContentColor = "#666666"
+
+	NumContests = 3 // Number of contests supported by this app
 )

@@ -12,85 +12,90 @@ import (
 func TestNewMessage(t *testing.T) {
 	tests := []struct {
 		name string
-		args []linebot.FlexComponent
-		want *linebot.BubbleContainer
+		args []*linebot.BoxComponent
+		want *linebot.FlexMessage
 	}{
 		{
 			name: "No args",
 			args: nil,
-			want: &linebot.BubbleContainer{
-				Type: linebot.FlexContainerTypeBubble,
-				Body: &linebot.BoxComponent{
-					Type:     linebot.FlexComponentTypeBox,
-					Layout:   linebot.FlexBoxLayoutTypeVertical,
-					Contents: nil,
+			want: &linebot.FlexMessage{
+				AltText: "Hello!",
+				Contents: &linebot.BubbleContainer{
+					Type: linebot.FlexContainerTypeBubble,
+					Body: &linebot.BoxComponent{
+						Type:     linebot.FlexComponentTypeBox,
+						Layout:   linebot.FlexBoxLayoutTypeVertical,
+						Contents: []linebot.FlexComponent{},
+					},
 				},
 			},
 		},
 		{
 			name: "Some args",
-			args: []linebot.FlexComponent{
-				&linebot.ImageComponent{
-					Type:     linebot.FlexComponentTypeImage,
-					URL:      "https://example.com/flex/images/image.jpg",
-					Animated: true,
-				},
-				&linebot.SeparatorComponent{
-					Type: linebot.FlexComponentTypeSeparator,
-				},
-				&linebot.TextComponent{
-					Type:       linebot.FlexComponentTypeText,
-					Text:       "Text in the box",
-					AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
-				},
-				&linebot.BoxComponent{
-					Type:     linebot.FlexComponentTypeBox,
-					Layout:   linebot.FlexBoxLayoutTypeVertical,
-					Contents: []linebot.FlexComponent{},
-					Width:    "30px",
-					Height:   "30px",
-					Background: &linebot.BoxBackground{
-						Type:           linebot.FlexBoxBackgroundTypeLinearGradient,
-						Angle:          "0deg",
-						StartColor:     "#ff0000",
-						EndColor:       "#00ff00",
-						CenterColor:    "#0000ff",
-						CenterPosition: "10%",
-					},
-				},
-			},
-			want: &linebot.BubbleContainer{
-				Type: linebot.FlexContainerTypeBubble,
-				Body: &linebot.BoxComponent{
+			args: []*linebot.BoxComponent{
+				{
 					Type:   linebot.FlexComponentTypeBox,
 					Layout: linebot.FlexBoxLayoutTypeVertical,
 					Contents: []linebot.FlexComponent{
-						&linebot.ImageComponent{
-							Type:     linebot.FlexComponentTypeImage,
-							URL:      "https://example.com/flex/images/image.jpg",
-							Animated: true,
-						},
-						&linebot.SeparatorComponent{
-							Type: linebot.FlexComponentTypeSeparator,
-						},
-						&linebot.TextComponent{
-							Type:       linebot.FlexComponentTypeText,
-							Text:       "Text in the box",
-							AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
-						},
 						&linebot.BoxComponent{
-							Type:     linebot.FlexComponentTypeBox,
-							Layout:   linebot.FlexBoxLayoutTypeVertical,
-							Contents: []linebot.FlexComponent{},
-							Width:    "30px",
-							Height:   "30px",
-							Background: &linebot.BoxBackground{
-								Type:           linebot.FlexBoxBackgroundTypeLinearGradient,
-								Angle:          "0deg",
-								StartColor:     "#ff0000",
-								EndColor:       "#00ff00",
-								CenterColor:    "#0000ff",
-								CenterPosition: "10%",
+							Type:   linebot.FlexComponentTypeBox,
+							Layout: linebot.FlexBoxLayoutTypeHorizontal,
+							Contents: []linebot.FlexComponent{
+								&linebot.TextComponent{
+									Type:       linebot.FlexComponentTypeText,
+									Text:       "Title",
+									AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
+									Size:       linebot.FlexTextSizeTypeSm,
+									Color:      "#aaaaaa",
+								},
+								&linebot.TextComponent{
+									Type:       linebot.FlexComponentTypeText,
+									Text:       "Content",
+									AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
+									Size:       linebot.FlexTextSizeTypeSm,
+									Color:      "#666666",
+								},
+							},
+						},
+					},
+				},
+			},
+			want: &linebot.FlexMessage{
+				AltText: "Hello!",
+				Contents: &linebot.BubbleContainer{
+					Type: linebot.FlexContainerTypeBubble,
+					Body: &linebot.BoxComponent{
+						Type:   linebot.FlexComponentTypeBox,
+						Layout: linebot.FlexBoxLayoutTypeVertical,
+						Contents: []linebot.FlexComponent{
+							&linebot.BoxComponent{
+								Type:   linebot.FlexComponentTypeBox,
+								Layout: linebot.FlexBoxLayoutTypeVertical,
+								Contents: []linebot.FlexComponent{
+									&linebot.BoxComponent{
+										Type:   linebot.FlexComponentTypeBox,
+										Layout: linebot.FlexBoxLayoutTypeHorizontal,
+										Contents: []linebot.FlexComponent{
+											&linebot.TextComponent{
+												Type:       linebot.FlexComponentTypeText,
+												Text:       "Title",
+												AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
+												Size:       linebot.FlexTextSizeTypeSm,
+												Color:      "#aaaaaa",
+											},
+											&linebot.TextComponent{
+												Type:       linebot.FlexComponentTypeText,
+												Text:       "Content",
+												AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
+												Size:       linebot.FlexTextSizeTypeSm,
+												Color:      "#666666",
+											},
+										},
+									},
+								},
+							},
+							&linebot.SeparatorComponent{
+								Type: linebot.FlexComponentTypeSeparator,
 							},
 						},
 					},
@@ -113,7 +118,7 @@ func TestNewMessaegSeparator(t *testing.T) {
 	want := &linebot.SeparatorComponent{
 		Type: linebot.FlexComponentTypeSeparator,
 	}
-	got := NewMessageSeparator()
+	got := newMessageSeparator()
 
 	if diff := cmp.Diff(got, want); diff != "" {
 		t.Errorf("NewMessageSeparator() returned invalid results (-got +want):\n %s", diff)
@@ -190,6 +195,73 @@ func TestNewMessageContestRange(t *testing.T) {
 
 	if diff := cmp.Diff(got, want); diff != "" {
 		t.Errorf("newMessageContestRange() returned invalid results (-got +want):\n %s", diff)
+	}
+}
+
+func TestNewFlexComponent(t *testing.T) {
+	args := []*linebot.BoxComponent{
+		{
+			Type:   linebot.FlexComponentTypeBox,
+			Layout: linebot.FlexBoxLayoutTypeVertical,
+			Contents: []linebot.FlexComponent{
+				&linebot.BoxComponent{
+					Type:   linebot.FlexComponentTypeBox,
+					Layout: linebot.FlexBoxLayoutTypeHorizontal,
+					Contents: []linebot.FlexComponent{
+						&linebot.TextComponent{
+							Type:       linebot.FlexComponentTypeText,
+							Text:       "Title",
+							AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
+							Size:       linebot.FlexTextSizeTypeSm,
+							Color:      "#aaaaaa",
+						},
+						&linebot.TextComponent{
+							Type:       linebot.FlexComponentTypeText,
+							Text:       "Content",
+							AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
+							Size:       linebot.FlexTextSizeTypeSm,
+							Color:      "#666666",
+						},
+					},
+				},
+			},
+		},
+	}
+	want := []linebot.FlexComponent{
+		&linebot.BoxComponent{
+			Type:   linebot.FlexComponentTypeBox,
+			Layout: linebot.FlexBoxLayoutTypeVertical,
+			Contents: []linebot.FlexComponent{
+				&linebot.BoxComponent{
+					Type:   linebot.FlexComponentTypeBox,
+					Layout: linebot.FlexBoxLayoutTypeHorizontal,
+					Contents: []linebot.FlexComponent{
+						&linebot.TextComponent{
+							Type:       linebot.FlexComponentTypeText,
+							Text:       "Title",
+							AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
+							Size:       linebot.FlexTextSizeTypeSm,
+							Color:      "#aaaaaa",
+						},
+						&linebot.TextComponent{
+							Type:       linebot.FlexComponentTypeText,
+							Text:       "Content",
+							AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
+							Size:       linebot.FlexTextSizeTypeSm,
+							Color:      "#666666",
+						},
+					},
+				},
+			},
+		},
+		&linebot.SeparatorComponent{
+			Type: linebot.FlexComponentTypeSeparator,
+		},
+	}
+	got := newFlexComponent(args)
+
+	if diff := cmp.Diff(got, want); diff != "" {
+		t.Errorf("newFlexComponent() returned invalid results (-got +want):\n %s", diff)
 	}
 }
 

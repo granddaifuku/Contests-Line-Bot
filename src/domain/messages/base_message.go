@@ -8,18 +8,20 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func NewMessage(contents []linebot.FlexComponent) *linebot.BubbleContainer {
-	return &linebot.BubbleContainer{
-		Type: linebot.FlexContainerTypeBubble,
-		Body: &linebot.BoxComponent{
-			Type:     linebot.FlexComponentTypeBox,
-			Layout:   linebot.FlexBoxLayoutTypeVertical,
-			Contents: contents,
-		},
-	}
+func NewMessage(contents []*linebot.BoxComponent) *linebot.FlexMessage {
+	return linebot.NewFlexMessage(
+		"Hello!",
+		&linebot.BubbleContainer{
+			Type: linebot.FlexContainerTypeBubble,
+			Body: &linebot.BoxComponent{
+				Type:     linebot.FlexComponentTypeBox,
+				Layout:   linebot.FlexBoxLayoutTypeVertical,
+				Contents: newFlexComponent(contents),
+			},
+		})
 }
 
-func NewMessageSeparator() *linebot.SeparatorComponent {
+func newMessageSeparator() *linebot.SeparatorComponent {
 	return &linebot.SeparatorComponent{
 		Type: linebot.FlexComponentTypeSeparator,
 	}
@@ -48,6 +50,16 @@ func newMessageContestRange(ratedRange string) []linebot.TextComponent {
 	texts[1] = newTextComponent(ratedRange, consts.ContentColor)
 
 	return texts
+}
+
+func newFlexComponent(boxes []*linebot.BoxComponent) []linebot.FlexComponent {
+	cpnts := make([]linebot.FlexComponent, 0)
+	for _, box := range boxes {
+		cpnts = append(cpnts, box)
+		cpnts = append(cpnts, newMessageSeparator())
+	}
+
+	return cpnts
 }
 
 func newTextComponent(text string, color string) linebot.TextComponent {
