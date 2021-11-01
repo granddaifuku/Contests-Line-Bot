@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"github.com/stretchr/testify/assert"
 )
@@ -107,7 +108,8 @@ func TestNewMessage(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got := NewMessage(tt.args)
-			if diff := cmp.Diff(got, tt.want); diff != "" {
+			opts := cmpopts.IgnoreUnexported(linebot.FlexMessage{})
+			if diff := cmp.Diff(got, tt.want, opts); diff != "" {
 				t.Errorf("NewMessage() returned invalid results (-got +want):\n %s", diff)
 			}
 		})
