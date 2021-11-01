@@ -47,8 +47,8 @@ func TestInsertAtcoder(t *testing.T) {
 		RatedRange: " ~ 1999",
 	}
 
-	cp := &contestPersistence{Conn: conn}
-	err := cp.InsertAtcoder(arg)
+	dp := &databasePersistence{Conn: conn}
+	err := dp.InsertAtcoder(arg)
 
 	// Assume there's no error
 	assert.Nil(t, err)
@@ -56,13 +56,13 @@ func TestInsertAtcoder(t *testing.T) {
 	// Assume there is one row
 	rows := selectRows(conn, tableName)
 	defer rows.Close()
-	got, err := cp.convertRows(rows, "AtCoder")
+	got, err := dp.convertRows(rows, "AtCoder")
 	if err != nil {
 		log.Fatal(err)
 	}
 	assert.Equal(t, 1, len(got))
 	if diff := cmp.Diff(got[0], arg); diff != "" {
-		t.Errorf("contestPersistence.InsertAtcoder() returned invalid results (-got +want):\n %s", diff)
+		t.Errorf("databasePersistence.InsertAtcoder() returned invalid results (-got +want):\n %s", diff)
 	}
 
 	resetTable(conn)
@@ -82,8 +82,8 @@ func TestInsertCodeforces(t *testing.T) {
 		EndTime:   time.Date(2021, 12, 30, 22, 40, 0, 0, jst),
 	}
 
-	cp := &contestPersistence{Conn: conn}
-	err := cp.InsertCodeforces(arg)
+	dp := &databasePersistence{Conn: conn}
+	err := dp.InsertCodeforces(arg)
 
 	// Assume there's no error
 	assert.Nil(t, err)
@@ -91,13 +91,13 @@ func TestInsertCodeforces(t *testing.T) {
 	// Assume there is one row
 	rows := selectRows(conn, tableName)
 	defer rows.Close()
-	got, err := cp.convertRows(rows, "Codeforces")
+	got, err := dp.convertRows(rows, "Codeforces")
 	if err != nil {
 		log.Fatal(err)
 	}
 	assert.Equal(t, 1, len(got))
 	if diff := cmp.Diff(got[0], arg); diff != "" {
-		t.Errorf("contestPersistence.InsertCodeforces() returned invalid results (-got +want):\n %s", diff)
+		t.Errorf("databasePersistence.InsertCodeforces() returned invalid results (-got +want):\n %s", diff)
 	}
 
 	resetTable(conn)
@@ -117,8 +117,8 @@ func TestInsertYukicoder(t *testing.T) {
 		EndTime:   time.Date(2021, 12, 30, 22, 40, 0, 0, jst),
 	}
 
-	cp := &contestPersistence{Conn: conn}
-	err := cp.InsertYukicoder(arg)
+	dp := &databasePersistence{Conn: conn}
+	err := dp.InsertYukicoder(arg)
 
 	// Assume there's no error
 	assert.Nil(t, err)
@@ -126,13 +126,13 @@ func TestInsertYukicoder(t *testing.T) {
 	// Assume there is one row
 	rows := selectRows(conn, tableName)
 	defer rows.Close()
-	got, err := cp.convertRows(rows, "Yukicoder")
+	got, err := dp.convertRows(rows, "Yukicoder")
 	if err != nil {
 		log.Fatal(err)
 	}
 	assert.Equal(t, 1, len(got))
 	if diff := cmp.Diff(got[0], arg); diff != "" {
-		t.Errorf("contestPersistence.InsertYukicoder() returned invalid results (-got +want):\n %s", diff)
+		t.Errorf("databasePersistence.InsertYukicoder() returned invalid results (-got +want):\n %s", diff)
 	}
 
 	resetTable(conn)
@@ -212,15 +212,26 @@ func TestBatchGet(t *testing.T) {
 				}
 			}
 
-			cp := &contestPersistence{Conn: conn}
-			got, err := cp.BatchGet(tt.arg)
+			dp := &databasePersistence{Conn: conn}
+			got, err := dp.BatchGet(tt.arg)
 			assert.Nil(t, err)
 
 			if diff := cmp.Diff(got, want); diff != "" {
-				t.Errorf("contestsPersistence.BatchGet() returned invalid results (-got +want):\n %s", diff)
+				t.Errorf("databasePersistence.BatchGet() returned invalid results (-got +want):\n %s", diff)
 			}
 
 			resetTable(conn)
+		})
+	}
+}
+
+func TestClearTables(t *testing.T) {
+	tests := []struct {
+		name       string
+		preDataset string
+	}{}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 		})
 	}
 }
@@ -285,8 +296,8 @@ func TestConvertRows(t *testing.T) {
 			rows := selectRows(conn, tt.platform)
 			defer rows.Close()
 
-			cp := &contestPersistence{}
-			got, err := cp.convertRows(rows, tt.platform)
+			dp := &databasePersistence{}
+			got, err := dp.convertRows(rows, tt.platform)
 			assert.Nil(t, err)
 
 			var want []interface{}
@@ -305,7 +316,7 @@ func TestConvertRows(t *testing.T) {
 				}
 			}
 			if diff := cmp.Diff(got, want); diff != "" {
-				t.Errorf("contestPersistence.convertRows() returned invalid results (-got +want):\n %s", diff)
+				t.Errorf("databasePersistence.convertRows() returned invalid results (-got +want):\n %s", diff)
 			}
 
 			resetTable(conn)

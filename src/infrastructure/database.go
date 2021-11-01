@@ -12,12 +12,12 @@ import (
 	"golang.org/x/xerrors"
 )
 
-type contestPersistence struct {
+type databasePersistence struct {
 	Conn *sql.DB
 }
 
-func NewContestPersistence(conn *sql.DB) repository.ContestRepository {
-	return &contestPersistence{Conn: conn}
+func NewContestPersistence(conn *sql.DB) repository.DatabaseRepository {
+	return &databasePersistence{Conn: conn}
 }
 
 func newConn() (*sql.DB, error) {
@@ -34,8 +34,8 @@ func newConn() (*sql.DB, error) {
 	return db, nil
 }
 
-func (cp *contestPersistence) InsertAtcoder(info domain.AtcoderInfo) error {
-	_, err := cp.Conn.Exec("INSERT INTO atcoder(name, start_time, end_time, range) VALUES($1, $2, $3, $4)", info.Name, info.StartTime, info.EndTime, info.RatedRange)
+func (dp *databasePersistence) InsertAtcoder(info domain.AtcoderInfo) error {
+	_, err := dp.Conn.Exec("INSERT INTO atcoder(name, start_time, end_time, range) VALUES($1, $2, $3, $4)", info.Name, info.StartTime, info.EndTime, info.RatedRange)
 	if err != nil {
 		return xerrors.Errorf("Error when Executing Statement for Inserting AtCoder Information: %w", err)
 	}
@@ -43,8 +43,8 @@ func (cp *contestPersistence) InsertAtcoder(info domain.AtcoderInfo) error {
 	return nil
 }
 
-func (cp *contestPersistence) InsertCodeforces(info domain.CodeforcesInfo) error {
-	_, err := cp.Conn.Exec("INSERT INTO codeforces(name, start_time, end_time) VALUES($1, $2, $3)", info.Name, info.StartTime, info.EndTime)
+func (dp *databasePersistence) InsertCodeforces(info domain.CodeforcesInfo) error {
+	_, err := dp.Conn.Exec("INSERT INTO codeforces(name, start_time, end_time) VALUES($1, $2, $3)", info.Name, info.StartTime, info.EndTime)
 	if err != nil {
 		return xerrors.Errorf("Error when Executing Statement for Inserting Codeforces Information: %w", err)
 	}
@@ -52,8 +52,8 @@ func (cp *contestPersistence) InsertCodeforces(info domain.CodeforcesInfo) error
 	return nil
 }
 
-func (cp *contestPersistence) InsertYukicoder(info domain.YukicoderInfo) error {
-	_, err := cp.Conn.Exec("INSERT INTO yukicoder(name, start_time, end_time) VALUES($1, $2, $3)", info.Name, info.StartTime, info.EndTime)
+func (dp *databasePersistence) InsertYukicoder(info domain.YukicoderInfo) error {
+	_, err := dp.Conn.Exec("INSERT INTO yukicoder(name, start_time, end_time) VALUES($1, $2, $3)", info.Name, info.StartTime, info.EndTime)
 	if err != nil {
 		return xerrors.Errorf("Error when Executing Statement for Inserting Yukicoder Information: %w", err)
 	}
@@ -62,18 +62,36 @@ func (cp *contestPersistence) InsertYukicoder(info domain.YukicoderInfo) error {
 }
 
 // Select all data from the spceified table
-func (cp *contestPersistence) BatchGet(platform string) ([]interface{}, error) {
+func (dp *databasePersistence) BatchGet(platform string) ([]interface{}, error) {
 	stmt := fmt.Sprintf("SELECT * FROM %s", platform)
-	rows, err := cp.Conn.Query(stmt)
+	rows, err := dp.Conn.Query(stmt)
 	if err != nil {
 		return nil, xerrors.Errorf("Error when Selecting Table: %w", err)
 	}
 
-	return cp.convertRows(rows, platform)
+	return dp.convertRows(rows, platform)
+}
+
+// Clear Table
+func (dp *databasePersistence) ClearTables() error {
+	tables := []string{
+		"atcoder",
+		"codeforces",
+		"yukicoder",
+	}
+	for _, table := range tables {
+		stmt := fmt.Sprintf("DELETE FROM %s", table)
+		_, err := dp.Conn.Exec(stmt)
+		if err != nil {
+			return xerrors.Errorf("Error when Deleting Table %s: %w", table, err)
+		}
+	}
+
+	return nil
 }
 
 // Convert rows to the specific struct
-func (cp *contestPersistence) convertRows(rows *sql.Rows, platform string) ([]interface{}, error) {
+func (dp *databasePersistence) convertRows(rows *sql.Rows, platform string) ([]interface{}, error) {
 	var id int
 	info := []interface{}{}
 	for rows.Next() {
