@@ -11,7 +11,7 @@ type Env struct {
 	Port          string `envconfig:"DB_PORT" required:"true"`
 	Name          string `envconfig:"DB_NAME" required:"true"`
 	ChannelSecret string `envconfig:"LINE_CHANNEL_SECRET" required:"true"`
-	ChannelToken  string `envconfig:"LINE_CHANEEL_TOKEN" required:"true"`
+	ChannelToken  string `envconfig:"LINE_CHANNEL_TOKEN" required:"true"`
 }
 
 func LoadEnv() (*Env, error) {

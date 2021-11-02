@@ -16,7 +16,7 @@ func TestLoadEnv(t *testing.T) {
 		Port:          "5432",
 		Name:          "test",
 		ChannelSecret: "dummy_channel_secret",
-		ChannelToken:  "dummy_channle_token",
+		ChannelToken:  "dummy_channel_token",
 	}
 	got, err := LoadEnv()
 	assert.Nil(t, err)
