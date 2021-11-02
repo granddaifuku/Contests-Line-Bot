@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"sort"
@@ -10,6 +11,7 @@ import (
 	"github.com/dnaeon/go-vcr/v2/recorder"
 	"github.com/google/go-cmp/cmp"
 	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
+	"github.com/granddaifuku/contest_line_bot/src/infrastructure"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -59,8 +61,9 @@ func TestFetchAtcoderInfo(t *testing.T) {
 			RatedRange: "1200 ~ ",
 		},
 	}
-	cs := &contestService{client: &http.Client{Transport: r}}
-	got, err := cs.FetchAtcoderInfo()
+	rr := infrastructure.NewRequestPersistence(&http.Client{Transport: r})
+	cs := &contestService{rr: rr}
+	got, err := cs.FetchAtcoderInfo(context.Background())
 	assert.Nil(t, err)
 	if diff := cmp.Diff(got, want); diff != "" {
 		t.Errorf("contestService.FetchAtcoderInfo() returned invalid results (-got +want):\n %s", diff)
@@ -170,8 +173,9 @@ func TestFetchCodeforcesInfo(t *testing.T) {
 			EndTime:   time.Date(2021, 12, 13, 2, 5, 0, 0, jst),
 		},
 	}
-	cs := &contestService{client: &http.Client{Transport: r}}
-	got, err := cs.FetchCodeforcesInfo()
+	rr := infrastructure.NewRequestPersistence(&http.Client{Transport: r})
+	cs := &contestService{rr: rr}
+	got, err := cs.FetchCodeforcesInfo(context.Background())
 	assert.Nil(t, err)
 	sort.SliceStable(want, func(i, j int) bool { return want[i].Name < want[j].Name })
 	sort.SliceStable(got, func(i, j int) bool { return got[i].Name < got[j].Name })
@@ -219,91 +223,12 @@ func TestFetchYukicoderInfo(t *testing.T) {
 			EndTime:   time.Date(2021, 11, 5, 23, 20, 0, 0, jst),
 		},
 	}
-	cs := &contestService{client: &http.Client{Transport: r}}
-	got, err := cs.FetchYukicoderInfo()
+	rr := infrastructure.NewRequestPersistence(&http.Client{Transport: r})
+	cs := &contestService{rr: rr}
+	got, err := cs.FetchYukicoderInfo(context.Background())
 	assert.Nil(t, err)
 	if diff := cmp.Diff(got, want); diff != "" {
 		t.Errorf("contestService.FetchYukicoderInfo() returned invalid results (-got +want):\n %s", diff)
-	}
-}
-
-func TestMakeGetRequest(t *testing.T) {
-	tests := []struct {
-		name        string
-		arg         string
-		fixturePath string
-		want        []byte
-	}{}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r, err := recorder.New("../../../fixtures/service/contests/" + tt.fixturePath)
-			if err != nil {
-				log.Fatal(err)
-			}
-			defer r.Stop()
-			cs := &contestService{client: &http.Client{Transport: r}}
-			got, err := cs.makeGetRequest(tt.arg)
-			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("contestService.makeGetRequest() returned invalid results (-got +want):\n %s", diff)
-			}
-		})
-	}
-}
-
-func TestDecodeJson(t *testing.T) {
-	type Cat struct {
-		Name     string   `json:"name"`
-		Age      int      `json:"age"`
-		Siblings []string `json:"siblings"`
-	}
-	type args struct {
-		body   []byte
-		target Cat
-	}
-	tests := []struct {
-		name    string
-		args    args
-		want    Cat
-		wantErr bool
-	}{
-		{
-			name: "Success",
-			args: args{
-				body:   []byte(`{"name":"Haru","age":1,"siblings":["Hime"]}`),
-				target: Cat{},
-			},
-			want: Cat{
-				Name: "Haru",
-				Age:  1,
-				Siblings: []string{
-					"Hime",
-				},
-			},
-			wantErr: false,
-		},
-		{
-			name: "Cannot unmarshal json data",
-			args: args{
-				body:   []byte(`{"name""Haru","age":1,"siblings":["Hime"]}`),
-				target: Cat{},
-			},
-			wantErr: true,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			cs := &contestService{}
-			err := cs.decodeJson(tt.args.body, &tt.args.target)
-			if tt.wantErr {
-				assert.Error(t, err)
-				return
-			}
-			assert.Nil(t, err)
-			if diff := cmp.Diff(tt.args.target, tt.want); diff != "" {
-				t.Errorf("contestService.decodeJson() do not work properly (-got, +want):\n %s", diff)
-			}
-		})
 	}
 }
 

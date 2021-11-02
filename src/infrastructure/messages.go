@@ -14,7 +14,9 @@ type messagePersistence struct {
 	client *linebot.Client
 }
 
-func NewMessagePersistence(client *http.Client) (repository.MessageRepository, error) {
+func NewMessagePersistence(
+	client *http.Client,
+) (repository.MessageRepository, error) {
 	env, _ := envs.LoadEnv()
 	opts := []linebot.ClientOption{}
 	if client != nil {
