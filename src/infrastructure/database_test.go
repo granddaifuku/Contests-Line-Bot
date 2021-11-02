@@ -229,9 +229,36 @@ func TestClearTables(t *testing.T) {
 	tests := []struct {
 		name       string
 		preDataset string
-	}{}
+	}{
+		{
+			name:       "atcoder",
+			preDataset: "../tests/atcoder_predataset.sql",
+		},
+		{
+			name:       "codeforces",
+			preDataset: "../tests/codeforces_predataset.sql",
+		},
+		{
+			name:       "yukicoder",
+			preDataset: "../tests/yukicoder_predataset.sql",
+		},
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			conn := dbConn()
+			execFile(conn, tt.preDataset)
+			// Check the data is correctly inserted
+			assert.Greater(t, countRows(conn, tt.name), 0)
+
+			dp := &databasePersistence{Conn: conn}
+			err := dp.ClearTables()
+			if err != nil {
+				t.Errorf("Failed to run databasePersistence.ClearTables(): %v\n", err)
+				return
+			}
+
+			// Check the table is cleared
+			assert.Equal(t, countRows(conn, tt.name), 0)
 		})
 	}
 }
