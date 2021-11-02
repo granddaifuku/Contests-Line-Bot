@@ -3,8 +3,8 @@ package messages
 import (
 	"context"
 
-	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
-	"github.com/granddaifuku/contest_line_bot/src/domain/messages"
+	contests "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
+	messages "github.com/granddaifuku/contest_line_bot/src/domain/model/messages"
 	"github.com/granddaifuku/contest_line_bot/src/internal/consts"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"golang.org/x/xerrors"
@@ -13,9 +13,9 @@ import (
 type MessageService interface {
 	BuildMessages(
 		ctx context.Context,
-		atc []domain.AtcoderInfo,
-		cdf []domain.CodeforcesInfo,
-		ykc []domain.YukicoderInfo,
+		atc []contests.AtcoderInfo,
+		cdf []contests.CodeforcesInfo,
+		ykc []contests.YukicoderInfo,
 	) ([]*linebot.FlexMessage, error)
 }
 
@@ -27,9 +27,9 @@ func NewMessageService() MessageService {
 
 func (ms *messageService) BuildMessages(
 	ctx context.Context,
-	atc []domain.AtcoderInfo,
-	cdf []domain.CodeforcesInfo,
-	ykc []domain.YukicoderInfo,
+	atc []contests.AtcoderInfo,
+	cdf []contests.CodeforcesInfo,
+	ykc []contests.YukicoderInfo,
 ) ([]*linebot.FlexMessage, error) {
 	atcMsgs := make([]*linebot.BoxComponent, len(atc))
 	cdfMsgs := make([]*linebot.BoxComponent, len(cdf))

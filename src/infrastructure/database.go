@@ -7,7 +7,7 @@ import (
 
 	_ "github.com/lib/pq"
 
-	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
+	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
 	"github.com/granddaifuku/contest_line_bot/src/internal/envs"
 	"golang.org/x/xerrors"

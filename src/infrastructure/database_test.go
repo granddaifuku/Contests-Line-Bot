@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"io/ioutil"
@@ -12,7 +13,7 @@ import (
 	_ "github.com/lib/pq"
 
 	"github.com/google/go-cmp/cmp"
-	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
+	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -48,7 +49,7 @@ func TestInsertAtcoder(t *testing.T) {
 	}
 
 	dp := &databasePersistence{Conn: conn}
-	err := dp.InsertAtcoder(arg)
+	err := dp.InsertAtcoder(context.Background(), arg)
 
 	// Assume there's no error
 	assert.Nil(t, err)
@@ -83,7 +84,7 @@ func TestInsertCodeforces(t *testing.T) {
 	}
 
 	dp := &databasePersistence{Conn: conn}
-	err := dp.InsertCodeforces(arg)
+	err := dp.InsertCodeforces(context.Background(), arg)
 
 	// Assume there's no error
 	assert.Nil(t, err)
@@ -118,7 +119,7 @@ func TestInsertYukicoder(t *testing.T) {
 	}
 
 	dp := &databasePersistence{Conn: conn}
-	err := dp.InsertYukicoder(arg)
+	err := dp.InsertYukicoder(context.Background(), arg)
 
 	// Assume there's no error
 	assert.Nil(t, err)
@@ -213,7 +214,7 @@ func TestBatchGet(t *testing.T) {
 			}
 
 			dp := &databasePersistence{Conn: conn}
-			got, err := dp.BatchGet(tt.arg)
+			got, err := dp.BatchGet(context.Background(), tt.arg)
 			assert.Nil(t, err)
 
 			if diff := cmp.Diff(got, want); diff != "" {
@@ -251,7 +252,7 @@ func TestClearTables(t *testing.T) {
 			assert.Greater(t, countRows(conn, tt.name), 0)
 
 			dp := &databasePersistence{Conn: conn}
-			err := dp.ClearTables()
+			err := dp.ClearTables(context.Background())
 			if err != nil {
 				t.Errorf("Failed to run databasePersistence.ClearTables(): %v\n", err)
 				return

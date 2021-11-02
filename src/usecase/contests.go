@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
-	service "github.com/granddaifuku/contest_line_bot/src/service/contests"
+	service "github.com/granddaifuku/contest_line_bot/src/domain/service/contests"
 	"golang.org/x/xerrors"
 )
 

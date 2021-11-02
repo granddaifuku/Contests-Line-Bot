@@ -10,7 +10,7 @@ import (
 
 	"github.com/dnaeon/go-vcr/v2/recorder"
 	"github.com/google/go-cmp/cmp"
-	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
+	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/granddaifuku/contest_line_bot/src/infrastructure"
 	"github.com/stretchr/testify/assert"
 )
@@ -18,7 +18,7 @@ import (
 var jst = time.FixedZone("Azia/Tokyo", 9*60*60)
 
 func TestFetchAtcoderInfo(t *testing.T) {
-	r, err := recorder.New("../../../fixtures/service/contests/fetch_atcoder_info")
+	r, err := recorder.New("../../../../fixtures/service/contests/fetch_atcoder_info")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,7 +71,7 @@ func TestFetchAtcoderInfo(t *testing.T) {
 }
 
 func TestFetchCodeforcesInfo(t *testing.T) {
-	r, err := recorder.New("../../../fixtures/service/contests/fetch_codeforces_info")
+	r, err := recorder.New("../../../../fixtures/service/contests/fetch_codeforces_info")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -186,7 +186,7 @@ func TestFetchCodeforcesInfo(t *testing.T) {
 }
 
 func TestFetchYukicoderInfo(t *testing.T) {
-	r, err := recorder.New("../../../fixtures/service/contests/fetch_yukicoder_info")
+	r, err := recorder.New("../../../../fixtures/service/contests/fetch_yukicoder_info")
 	if err != nil {
 		log.Fatal(err)
 	}

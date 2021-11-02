@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
+	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"github.com/stretchr/testify/assert"
 )
@@ -35,8 +35,9 @@ func TestBuildMessages(t *testing.T) {
 					Contents: &linebot.BubbleContainer{
 						Type: "bubble",
 						Body: &linebot.BoxComponent{
-							Type:   linebot.FlexComponentTypeBox,
-							Layout: linebot.FlexBoxLayoutTypeVertical,
+							Type:     linebot.FlexComponentTypeBox,
+							Layout:   linebot.FlexBoxLayoutTypeVertical,
+							Contents: []linebot.FlexComponent{},
 						},
 					},
 				},
@@ -45,8 +46,9 @@ func TestBuildMessages(t *testing.T) {
 					Contents: &linebot.BubbleContainer{
 						Type: "bubble",
 						Body: &linebot.BoxComponent{
-							Type:   linebot.FlexComponentTypeBox,
-							Layout: linebot.FlexBoxLayoutTypeVertical,
+							Type:     linebot.FlexComponentTypeBox,
+							Layout:   linebot.FlexBoxLayoutTypeVertical,
+							Contents: []linebot.FlexComponent{},
 						},
 					},
 				},
@@ -55,8 +57,9 @@ func TestBuildMessages(t *testing.T) {
 					Contents: &linebot.BubbleContainer{
 						Type: "bubble",
 						Body: &linebot.BoxComponent{
-							Type:   linebot.FlexComponentTypeBox,
-							Layout: linebot.FlexBoxLayoutTypeVertical,
+							Type:     linebot.FlexComponentTypeBox,
+							Layout:   linebot.FlexBoxLayoutTypeVertical,
+							Contents: []linebot.FlexComponent{},
 						},
 					},
 				},

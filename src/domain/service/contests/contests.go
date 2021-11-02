@@ -7,7 +7,7 @@ import (
 	"unicode"
 
 	"github.com/PuerkitoBio/goquery"
-	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
+	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
 	"github.com/granddaifuku/contest_line_bot/src/internal/consts"
 	"golang.org/x/xerrors"

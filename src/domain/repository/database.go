@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
+	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 )
 
 type DatabaseRepository interface {

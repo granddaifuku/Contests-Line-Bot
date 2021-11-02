@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-	domain "github.com/granddaifuku/contest_line_bot/src/domain/contests"
+	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 	"github.com/stretchr/testify/assert"
 )
