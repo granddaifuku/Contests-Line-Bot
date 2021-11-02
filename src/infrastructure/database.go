@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 
@@ -34,7 +35,10 @@ func newConn() (*sql.DB, error) {
 	return db, nil
 }
 
-func (dp *databasePersistence) InsertAtcoder(info domain.AtcoderInfo) error {
+func (dp *databasePersistence) InsertAtcoder(
+	ctx context.Context,
+	info domain.AtcoderInfo,
+) error {
 	_, err := dp.Conn.Exec("INSERT INTO atcoder(name, start_time, end_time, range) VALUES($1, $2, $3, $4)", info.Name, info.StartTime, info.EndTime, info.RatedRange)
 	if err != nil {
 		return xerrors.Errorf("Error when Executing Statement for Inserting AtCoder Information: %w", err)
@@ -43,7 +47,10 @@ func (dp *databasePersistence) InsertAtcoder(info domain.AtcoderInfo) error {
 	return nil
 }
 
-func (dp *databasePersistence) InsertCodeforces(info domain.CodeforcesInfo) error {
+func (dp *databasePersistence) InsertCodeforces(
+	ctx context.Context,
+	info domain.CodeforcesInfo,
+) error {
 	_, err := dp.Conn.Exec("INSERT INTO codeforces(name, start_time, end_time) VALUES($1, $2, $3)", info.Name, info.StartTime, info.EndTime)
 	if err != nil {
 		return xerrors.Errorf("Error when Executing Statement for Inserting Codeforces Information: %w", err)
@@ -52,7 +59,10 @@ func (dp *databasePersistence) InsertCodeforces(info domain.CodeforcesInfo) erro
 	return nil
 }
 
-func (dp *databasePersistence) InsertYukicoder(info domain.YukicoderInfo) error {
+func (dp *databasePersistence) InsertYukicoder(
+	ctx context.Context,
+	info domain.YukicoderInfo,
+) error {
 	_, err := dp.Conn.Exec("INSERT INTO yukicoder(name, start_time, end_time) VALUES($1, $2, $3)", info.Name, info.StartTime, info.EndTime)
 	if err != nil {
 		return xerrors.Errorf("Error when Executing Statement for Inserting Yukicoder Information: %w", err)
@@ -62,7 +72,10 @@ func (dp *databasePersistence) InsertYukicoder(info domain.YukicoderInfo) error 
 }
 
 // Select all data from the spceified table
-func (dp *databasePersistence) BatchGet(platform string) ([]interface{}, error) {
+func (dp *databasePersistence) BatchGet(
+	ctx context.Context,
+	platform string,
+) ([]interface{}, error) {
 	stmt := fmt.Sprintf("SELECT * FROM %s", platform)
 	rows, err := dp.Conn.Query(stmt)
 	if err != nil {
@@ -73,7 +86,9 @@ func (dp *databasePersistence) BatchGet(platform string) ([]interface{}, error) 
 }
 
 // Clear Table
-func (dp *databasePersistence) ClearTables() error {
+func (dp *databasePersistence) ClearTables(
+	ctx context.Context,
+) error {
 	tables := []string{
 		"atcoder",
 		"codeforces",
@@ -91,7 +106,10 @@ func (dp *databasePersistence) ClearTables() error {
 }
 
 // Convert rows to the specific struct
-func (dp *databasePersistence) convertRows(rows *sql.Rows, platform string) ([]interface{}, error) {
+func (dp *databasePersistence) convertRows(
+	rows *sql.Rows,
+	platform string,
+) ([]interface{}, error) {
 	var id int
 	info := []interface{}{}
 	for rows.Next() {
