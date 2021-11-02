@@ -18,7 +18,7 @@ import (
 var jst = time.FixedZone("Azia/Tokyo", 9*60*60)
 
 func TestFetchAtcoderInfo(t *testing.T) {
-	r, err := recorder.New("../../../../fixtures/service/contests/fetch_atcoder_info")
+	r, err := recorder.New("../../../fixtures/service/contests/fetch_atcoder_info")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,16 +62,16 @@ func TestFetchAtcoderInfo(t *testing.T) {
 		},
 	}
 	rr := infrastructure.NewRequestPersistence(&http.Client{Transport: r})
-	cs := &contestService{rr: rr}
+	cs := &crawlerService{rr: rr}
 	got, err := cs.FetchAtcoderInfo(context.Background())
 	assert.Nil(t, err)
 	if diff := cmp.Diff(got, want); diff != "" {
-		t.Errorf("contestService.FetchAtcoderInfo() returned invalid results (-got +want):\n %s", diff)
+		t.Errorf("crawlerService.FetchAtcoderInfo() returned invalid results (-got +want):\n %s", diff)
 	}
 }
 
 func TestFetchCodeforcesInfo(t *testing.T) {
-	r, err := recorder.New("../../../../fixtures/service/contests/fetch_codeforces_info")
+	r, err := recorder.New("../../../fixtures/service/contests/fetch_codeforces_info")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -174,19 +174,19 @@ func TestFetchCodeforcesInfo(t *testing.T) {
 		},
 	}
 	rr := infrastructure.NewRequestPersistence(&http.Client{Transport: r})
-	cs := &contestService{rr: rr}
+	cs := &crawlerService{rr: rr}
 	got, err := cs.FetchCodeforcesInfo(context.Background())
 	assert.Nil(t, err)
 	sort.SliceStable(want, func(i, j int) bool { return want[i].Name < want[j].Name })
 	sort.SliceStable(got, func(i, j int) bool { return got[i].Name < got[j].Name })
 
 	if diff := cmp.Diff(got, want); diff != "" {
-		t.Errorf("contestService.FetchCodeforcesInfo() returned invalid results (-got +want):\n %s", diff)
+		t.Errorf("crawlerService.FetchCodeforcesInfo() returned invalid results (-got +want):\n %s", diff)
 	}
 }
 
 func TestFetchYukicoderInfo(t *testing.T) {
-	r, err := recorder.New("../../../../fixtures/service/contests/fetch_yukicoder_info")
+	r, err := recorder.New("../../../fixtures/service/contests/fetch_yukicoder_info")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -224,11 +224,11 @@ func TestFetchYukicoderInfo(t *testing.T) {
 		},
 	}
 	rr := infrastructure.NewRequestPersistence(&http.Client{Transport: r})
-	cs := &contestService{rr: rr}
+	cs := &crawlerService{rr: rr}
 	got, err := cs.FetchYukicoderInfo(context.Background())
 	assert.Nil(t, err)
 	if diff := cmp.Diff(got, want); diff != "" {
-		t.Errorf("contestService.FetchYukicoderInfo() returned invalid results (-got +want):\n %s", diff)
+		t.Errorf("crawlerService.FetchYukicoderInfo() returned invalid results (-got +want):\n %s", diff)
 	}
 }
 
@@ -280,10 +280,10 @@ func TestArrangeAtcoderInfo(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cs := &contestService{}
+			cs := &crawlerService{}
 			got := cs.arrangeAtcoderInfo(tt.arg)
 			if diff := cmp.Diff(got, tt.want); diff != "" {
-				t.Errorf("contestsService.arrangeAtcoderInfo() returned invalid results (-got +want):\n %s", diff)
+				t.Errorf("crawlerService.arrangeAtcoderInfo() returned invalid results (-got +want):\n %s", diff)
 			}
 		})
 	}

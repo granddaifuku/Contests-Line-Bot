@@ -5,11 +5,11 @@ import (
 
 	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
-	"github.com/granddaifuku/contest_line_bot/src/domain/service/messages"
+	"github.com/granddaifuku/contest_line_bot/src/domain/service"
 	"golang.org/x/xerrors"
 )
 
-type MessageUsecase interface {
+type NotificatorUsecase interface {
 	Reply(
 		ctx context.Context,
 		replyToken string,
@@ -20,38 +20,38 @@ type MessageUsecase interface {
 	) error
 }
 
-type messageUsecase struct {
-	ms messages.MessageService
-	mr repository.MessageRepository
+type notificatorUsecase struct {
+	ns service.NotificatorService
+	nr repository.NotificatorRepository
 	dr repository.DatabaseRepository
 }
 
-func NewMessageUsecase(
-	ms messages.MessageService,
-	mr repository.MessageRepository,
+func NewNotificatorUsecase(
+	ns service.NotificatorService,
+	nr repository.NotificatorRepository,
 	dr repository.DatabaseRepository,
-) MessageUsecase {
-	return &messageUsecase{
-		ms: ms,
-		mr: mr,
+) NotificatorUsecase {
+	return &notificatorUsecase{
+		ns: ns,
+		nr: nr,
 		dr: dr,
 	}
 }
 
-func (mu *messageUsecase) Reply(
+func (nu *notificatorUsecase) Reply(
 	ctx context.Context,
 	replyToken string,
 ) error {
 	// Get information from the database
-	atcInfo, err := mu.dr.BatchGet(ctx, "AtCoder")
+	atcInfo, err := nu.dr.BatchGet(ctx, "AtCoder")
 	if err != nil {
 		return xerrors.Errorf("Error when Selecting AtCoder Database: %w", err)
 	}
-	cdfInfo, err := mu.dr.BatchGet(ctx, "Codeforces")
+	cdfInfo, err := nu.dr.BatchGet(ctx, "Codeforces")
 	if err != nil {
 		return xerrors.Errorf("Error when Selecting Codeforces Database: %w", err)
 	}
-	ykcInfo, err := mu.dr.BatchGet(ctx, "Yukicoder")
+	ykcInfo, err := nu.dr.BatchGet(ctx, "Yukicoder")
 	if err != nil {
 		return xerrors.Errorf("Error when Selecting Yukicoder Database: %w", err)
 	}
@@ -82,13 +82,13 @@ func (mu *messageUsecase) Reply(
 	}
 
 	// Convert information to messages
-	msgs, err := mu.ms.BuildMessages(ctx, atc, cdf, ykc)
+	msgs, err := nu.ns.BuildMessages(ctx, atc, cdf, ykc)
 	if err != nil {
 		return xerrors.Errorf("Error when Calling BuildMessages Function: %w", err)
 	}
 
 	// Reply
-	err = mu.mr.Reply(ctx, replyToken, msgs)
+	err = nu.nr.Reply(ctx, replyToken, msgs)
 	if err != nil {
 		return xerrors.Errorf("Error when Calling Reply Function: %w", err)
 	}
@@ -96,19 +96,19 @@ func (mu *messageUsecase) Reply(
 	return nil
 }
 
-func (mu *messageUsecase) Broadcast(
+func (nu *notificatorUsecase) Broadcast(
 	ctx context.Context,
 ) error {
 	// Get information from the database
-	atcInfo, err := mu.dr.BatchGet(ctx, "AtCoder")
+	atcInfo, err := nu.dr.BatchGet(ctx, "AtCoder")
 	if err != nil {
 		return xerrors.Errorf("Error when Selecting AtCoder Database: %w", err)
 	}
-	cdfInfo, err := mu.dr.BatchGet(ctx, "Codeforces")
+	cdfInfo, err := nu.dr.BatchGet(ctx, "Codeforces")
 	if err != nil {
 		return xerrors.Errorf("Error when Selecting Codeforces Database: %w", err)
 	}
-	ykcInfo, err := mu.dr.BatchGet(ctx, "Yukicoder")
+	ykcInfo, err := nu.dr.BatchGet(ctx, "Yukicoder")
 	if err != nil {
 		return xerrors.Errorf("Error when Selecting Yukicoder Database: %w", err)
 	}
@@ -139,13 +139,13 @@ func (mu *messageUsecase) Broadcast(
 	}
 
 	// Convert information to messages
-	msgs, err := mu.ms.BuildMessages(ctx, atc, cdf, ykc)
+	msgs, err := nu.ns.BuildMessages(ctx, atc, cdf, ykc)
 	if err != nil {
 		return xerrors.Errorf("Error when Calling BuildMessages Function: %w", err)
 	}
 
 	// Reply
-	err = mu.mr.Broadcast(ctx, msgs)
+	err = nu.nr.Broadcast(ctx, msgs)
 	if err != nil {
 		return xerrors.Errorf("Error when Calling Broadcast Function: %w", err)
 	}

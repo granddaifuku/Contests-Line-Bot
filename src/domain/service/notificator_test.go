@@ -1,4 +1,4 @@
-package messages
+package service
 
 import (
 	"context"
@@ -68,13 +68,13 @@ func TestBuildMessages(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			ms := &messageService{}
-			got, err := ms.BuildMessages(context.Background(), tt.args.atc, tt.args.cdf, tt.args.ykc)
+			ns := &notificatorService{}
+			got, err := ns.BuildMessages(context.Background(), tt.args.atc, tt.args.cdf, tt.args.ykc)
 			assert.Nil(t, err)
 
 			opt := cmpopts.IgnoreUnexported(linebot.FlexMessage{})
 			if diff := cmp.Diff(got, tt.want, opt); diff != "" {
-				t.Errorf("messageService.BuildMessage() returned invalid results (-got +want):\n %s", diff)
+				t.Errorf("notificatorService.BuildMessage() returned invalid results (-got +want):\n %s", diff)
 			}
 		})
 	}

@@ -4,33 +4,34 @@ import (
 	"context"
 
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
-	service "github.com/granddaifuku/contest_line_bot/src/domain/service/contests"
+	"github.com/granddaifuku/contest_line_bot/src/domain/service"
 	"golang.org/x/xerrors"
 )
 
-type ContestUsecase interface {
+type CrawlerUsecase interface {
 	Crawl(
 		ctx context.Context,
 	) error
 }
 
-type contestUsecase struct {
-	cs service.ContestService
+type crawlerUsecase struct {
+	cs service.CrawlerService
 	rr repository.RequestRepository
 	dr repository.DatabaseRepository
 }
 
-func NewContestUsecase(
-	cs service.ContestService,
+func NewCrawlerUsecase(
+	cs service.CrawlerService,
 	dr repository.DatabaseRepository,
-) ContestUsecase {
-	return &contestUsecase{
+) CrawlerUsecase {
+	return &crawlerUsecase{
 		cs: cs,
 		dr: dr,
 	}
 }
 
-func (cu *contestUsecase) Crawl(
+// Crawl the contest platforms and gather the future contests information
+func (cu *crawlerUsecase) Crawl(
 	ctx context.Context,
 ) error {
 	// Fetch contests information

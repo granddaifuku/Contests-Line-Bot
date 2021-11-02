@@ -13,7 +13,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-type ContestService interface {
+type CrawlerService interface {
 	FetchAtcoderInfo(
 		ctx context.Context,
 	) ([]domain.AtcoderInfo, error)
@@ -25,17 +25,17 @@ type ContestService interface {
 	) ([]domain.YukicoderInfo, error)
 }
 
-type contestService struct {
+type crawlerService struct {
 	rr repository.RequestRepository
 }
 
-func NewContestService(rr repository.RequestRepository) ContestService {
-	return &contestService{
+func NewContestService(rr repository.RequestRepository) CrawlerService {
+	return &crawlerService{
 		rr: rr,
 	}
 }
 
-func (cs *contestService) FetchAtcoderInfo(ctx context.Context) ([]domain.AtcoderInfo, error) {
+func (cs *crawlerService) FetchAtcoderInfo(ctx context.Context) ([]domain.AtcoderInfo, error) {
 	info := make([]domain.AtcoderInfo, 0)
 	body, err := cs.rr.Get(ctx, consts.AtcoderURL)
 	if err != nil {
@@ -68,7 +68,7 @@ func (cs *contestService) FetchAtcoderInfo(ctx context.Context) ([]domain.Atcode
 	return info, nil
 }
 
-func (cs *contestService) FetchCodeforcesInfo(ctx context.Context) ([]domain.CodeforcesInfo, error) {
+func (cs *crawlerService) FetchCodeforcesInfo(ctx context.Context) ([]domain.CodeforcesInfo, error) {
 	api := domain.CodeforcesApi{}
 	info := make([]domain.CodeforcesInfo, 0)
 	// Call Codeforces' contests information api
@@ -92,7 +92,7 @@ func (cs *contestService) FetchCodeforcesInfo(ctx context.Context) ([]domain.Cod
 	return info, nil
 }
 
-func (cs *contestService) FetchYukicoderInfo(ctx context.Context) ([]domain.YukicoderInfo, error) {
+func (cs *crawlerService) FetchYukicoderInfo(ctx context.Context) ([]domain.YukicoderInfo, error) {
 	info := make([]domain.YukicoderInfo, 0)
 	// Call Yukicoder's future contests api
 	body, err := cs.rr.Get(ctx, consts.YukicoderURL)
@@ -108,7 +108,7 @@ func (cs *contestService) FetchYukicoderInfo(ctx context.Context) ([]domain.Yuki
 }
 
 // Arrange Scraped AtCoder Information
-func (cs *contestService) arrangeAtcoderInfo(text string) []string {
+func (cs *crawlerService) arrangeAtcoderInfo(text string) []string {
 	// Remove unnecessary elements
 	text = strings.ReplaceAll(text, "◉", "")
 

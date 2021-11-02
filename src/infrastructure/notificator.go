@@ -10,13 +10,13 @@ import (
 	"golang.org/x/xerrors"
 )
 
-type messagePersistence struct {
+type notificatorPersistence struct {
 	client *linebot.Client
 }
 
-func NewMessagePersistence(
+func NewNotificatorPersistence(
 	client *http.Client,
-) (repository.MessageRepository, error) {
+) (repository.NotificatorRepository, error) {
 	env, _ := envs.LoadEnv()
 	opts := []linebot.ClientOption{}
 	if client != nil {
@@ -27,15 +27,15 @@ func NewMessagePersistence(
 		return nil, xerrors.Errorf("Error when Creating Client: %w", err)
 	}
 
-	return &messagePersistence{client: bot}, nil
+	return &notificatorPersistence{client: bot}, nil
 }
 
-func (mp *messagePersistence) Broadcast(
+func (np *notificatorPersistence) Broadcast(
 	ctx context.Context,
 	msgs []*linebot.FlexMessage,
 ) error {
 	for _, msg := range msgs {
-		_, err := mp.client.BroadcastMessage(msg).WithContext(ctx).Do()
+		_, err := np.client.BroadcastMessage(msg).WithContext(ctx).Do()
 		if err != nil {
 			return xerrors.Errorf("Error when Broadcasting Messages: %w", err)
 		}
@@ -44,13 +44,13 @@ func (mp *messagePersistence) Broadcast(
 	return nil
 }
 
-func (mp *messagePersistence) Reply(
+func (np *notificatorPersistence) Reply(
 	ctx context.Context,
 	replyToken string,
 	msgs []*linebot.FlexMessage,
 ) error {
 	for _, msg := range msgs {
-		_, err := mp.client.ReplyMessage(replyToken, msg).WithContext(ctx).Do()
+		_, err := np.client.ReplyMessage(replyToken, msg).WithContext(ctx).Do()
 		if err != nil {
 			return xerrors.Errorf("Error when Replying Messages: %w", err)
 		}

@@ -6,7 +6,7 @@ import (
 	"github.com/line/line-bot-sdk-go/v7/linebot"
 )
 
-type MessageRepository interface {
+type NotificatorRepository interface {
 	Broadcast(
 		ctx context.Context,
 		msgs []*linebot.FlexMessage,

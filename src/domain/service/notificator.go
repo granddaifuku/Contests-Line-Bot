@@ -1,4 +1,4 @@
-package messages
+package service
 
 import (
 	"context"
@@ -10,7 +10,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-type MessageService interface {
+type NotificatorService interface {
 	BuildMessages(
 		ctx context.Context,
 		atc []contests.AtcoderInfo,
@@ -19,13 +19,13 @@ type MessageService interface {
 	) ([]*linebot.FlexMessage, error)
 }
 
-type messageService struct{}
+type notificatorService struct{}
 
-func NewMessageService() MessageService {
-	return &messageService{}
+func NewNotificatorService() NotificatorService {
+	return &notificatorService{}
 }
 
-func (ms *messageService) BuildMessages(
+func (ns *notificatorService) BuildMessages(
 	ctx context.Context,
 	atc []contests.AtcoderInfo,
 	cdf []contests.CodeforcesInfo,
