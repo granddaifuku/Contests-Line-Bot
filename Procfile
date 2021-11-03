@@ -1,1 +1,1 @@
-web: bin/Contest-Line-Bot
+web: bin/cmd
