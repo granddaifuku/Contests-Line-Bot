@@ -16,7 +16,6 @@ type CrawlerUsecase interface {
 
 type crawlerUsecase struct {
 	cs service.CrawlerService
-	rr repository.RequestRepository
 	dr repository.DatabaseRepository
 }
 

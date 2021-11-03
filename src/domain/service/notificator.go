@@ -59,9 +59,9 @@ func (ns *notificatorService) BuildMessages(
 		ykcMsgs[i] = mes
 	}
 	msgs := make([]*linebot.FlexMessage, consts.NumContests)
-	msgs[0] = messages.NewMessage(atcMsgs)
-	msgs[1] = messages.NewMessage(cdfMsgs)
-	msgs[2] = messages.NewMessage(ykcMsgs)
+	msgs[0] = messages.NewMessage(atcMsgs, "AtCoder")
+	msgs[1] = messages.NewMessage(cdfMsgs, "Codeforces")
+	msgs[2] = messages.NewMessage(ykcMsgs, "Yukicoder")
 
 	return msgs, nil
 }

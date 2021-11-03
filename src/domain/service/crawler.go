@@ -29,7 +29,7 @@ type crawlerService struct {
 	rr repository.RequestRepository
 }
 
-func NewContestService(rr repository.RequestRepository) CrawlerService {
+func NewCrawlerService(rr repository.RequestRepository) CrawlerService {
 	return &crawlerService{
 		rr: rr,
 	}

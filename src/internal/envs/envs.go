@@ -6,6 +6,7 @@ import (
 )
 
 type Env struct {
+	Host          string `envconfig:"DB_HOST" required:"true"`
 	UserName      string `envconfig:"DB_USER_NAME" required:"true"`
 	Password      string `envconfig:"DB_PASSWORD" required:"true"`
 	Port          string `envconfig:"DB_PORT" required:"true"`

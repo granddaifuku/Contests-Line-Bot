@@ -17,7 +17,17 @@ type databasePersistence struct {
 	Conn *sql.DB
 }
 
-func NewContestPersistence(conn *sql.DB) repository.DatabaseRepository {
+func NewDatabasePersistence(conn *sql.DB) repository.DatabaseRepository {
+	if conn == nil {
+		c, err := newConn()
+		if err != nil {
+			panic(err)
+		}
+		conn = c
+		if err := conn.Ping(); err != nil {
+			panic(err)
+		}
+	}
 	return &databasePersistence{Conn: conn}
 }
 
@@ -26,7 +36,7 @@ func newConn() (*sql.DB, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("Error when Loading Envs: %w", err)
 	}
-	dbInfo := fmt.Sprintf("host=postgres port=%s user=%s password=%s dbname=%s", env.Port, env.UserName, env.Password, env.Name)
+	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", env.Host, env.Port, env.UserName, env.Password, env.Name)
 	db, err := sql.Open("postgres", dbInfo)
 	if err != nil {
 		return nil, xerrors.Errorf("Error when Connecting DB: %w", err)

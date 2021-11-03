@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"net/http"
 
 	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
@@ -10,9 +11,14 @@ import (
 )
 
 type NotificatorUsecase interface {
+	Extract(
+		ctx context.Context,
+		req *http.Request,
+	) ([]string, error)
+
 	Reply(
 		ctx context.Context,
-		replyToken string,
+		tokens []string,
 	) error
 
 	Broadcast(
@@ -38,9 +44,17 @@ func NewNotificatorUsecase(
 	}
 }
 
+// Classify the requests and extract the tokens
+func (nu *notificatorUsecase) Extract(
+	ctx context.Context,
+	req *http.Request,
+) ([]string, error) {
+	return nu.nr.ExtractTokens(ctx, req)
+}
+
 func (nu *notificatorUsecase) Reply(
 	ctx context.Context,
-	replyToken string,
+	tokens []string,
 ) error {
 	// Get information from the database
 	atcInfo, err := nu.dr.BatchGet(ctx, "AtCoder")
@@ -74,7 +88,7 @@ func (nu *notificatorUsecase) Reply(
 	}
 	ykc := make([]domain.YukicoderInfo, len(ykcInfo))
 	for i := range ykcInfo {
-		info, ok := atcInfo[i].(domain.YukicoderInfo)
+		info, ok := ykcInfo[i].(domain.YukicoderInfo)
 		if !ok {
 			return xerrors.New("Failed to Cast Yukicoder Info")
 		}
@@ -88,9 +102,11 @@ func (nu *notificatorUsecase) Reply(
 	}
 
 	// Reply
-	err = nu.nr.Reply(ctx, replyToken, msgs)
-	if err != nil {
-		return xerrors.Errorf("Error when Calling Reply Function: %w", err)
+	for _, token := range tokens {
+		err = nu.nr.Reply(ctx, token, msgs)
+		if err != nil {
+			return xerrors.Errorf("Error when Calling Reply Function: %w", err)
+		}
 	}
 
 	return nil

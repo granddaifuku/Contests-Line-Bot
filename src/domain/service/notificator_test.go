@@ -35,9 +35,16 @@ func TestBuildMessages(t *testing.T) {
 					Contents: &linebot.BubbleContainer{
 						Type: "bubble",
 						Body: &linebot.BoxComponent{
-							Type:     linebot.FlexComponentTypeBox,
-							Layout:   linebot.FlexBoxLayoutTypeVertical,
-							Contents: []linebot.FlexComponent{},
+							Type:   linebot.FlexComponentTypeBox,
+							Layout: linebot.FlexBoxLayoutTypeVertical,
+							Contents: []linebot.FlexComponent{
+								&linebot.TextComponent{
+									Type:   linebot.FlexComponentTypeText,
+									Text:   "AtCoder",
+									Size:   linebot.FlexTextSizeTypeXl,
+									Weight: linebot.FlexTextWeightTypeBold,
+								},
+							},
 						},
 					},
 				},
@@ -46,9 +53,16 @@ func TestBuildMessages(t *testing.T) {
 					Contents: &linebot.BubbleContainer{
 						Type: "bubble",
 						Body: &linebot.BoxComponent{
-							Type:     linebot.FlexComponentTypeBox,
-							Layout:   linebot.FlexBoxLayoutTypeVertical,
-							Contents: []linebot.FlexComponent{},
+							Type:   linebot.FlexComponentTypeBox,
+							Layout: linebot.FlexBoxLayoutTypeVertical,
+							Contents: []linebot.FlexComponent{
+								&linebot.TextComponent{
+									Type:   linebot.FlexComponentTypeText,
+									Text:   "Codeforces",
+									Size:   linebot.FlexTextSizeTypeXl,
+									Weight: linebot.FlexTextWeightTypeBold,
+								},
+							},
 						},
 					},
 				},
@@ -57,9 +71,16 @@ func TestBuildMessages(t *testing.T) {
 					Contents: &linebot.BubbleContainer{
 						Type: "bubble",
 						Body: &linebot.BoxComponent{
-							Type:     linebot.FlexComponentTypeBox,
-							Layout:   linebot.FlexBoxLayoutTypeVertical,
-							Contents: []linebot.FlexComponent{},
+							Type:   linebot.FlexComponentTypeBox,
+							Layout: linebot.FlexBoxLayoutTypeVertical,
+							Contents: []linebot.FlexComponent{
+								&linebot.TextComponent{
+									Type:   linebot.FlexComponentTypeText,
+									Text:   "Yukicoder",
+									Size:   linebot.FlexTextSizeTypeXl,
+									Weight: linebot.FlexTextWeightTypeBold,
+								},
+							},
 						},
 					},
 				},

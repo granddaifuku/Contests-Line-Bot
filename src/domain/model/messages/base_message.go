@@ -8,7 +8,11 @@ import (
 	"golang.org/x/xerrors"
 )
 
-func NewMessage(contents []*linebot.BoxComponent) *linebot.FlexMessage {
+func NewMessage(contents []*linebot.BoxComponent, platform string) *linebot.FlexMessage {
+	body := make([]linebot.FlexComponent, 0)
+	body = append(body, newTextPlatform(platform))
+	body = append(body, newFlexComponent(contents)...)
+
 	return linebot.NewFlexMessage(
 		"Hello!",
 		&linebot.BubbleContainer{
@@ -16,7 +20,7 @@ func NewMessage(contents []*linebot.BoxComponent) *linebot.FlexMessage {
 			Body: &linebot.BoxComponent{
 				Type:     linebot.FlexComponentTypeBox,
 				Layout:   linebot.FlexBoxLayoutTypeVertical,
-				Contents: newFlexComponent(contents),
+				Contents: body,
 			},
 		})
 }
@@ -30,7 +34,7 @@ func newMessageSeparator() *linebot.SeparatorComponent {
 func newMessageContestName(name string) []linebot.TextComponent {
 	texts := make([]linebot.TextComponent, 2)
 	texts[0] = newTextComponent("Name", consts.TitleColor)
-	texts[1] = newTextComponent(name, consts.ContentColor)
+	texts[1] = newTextContentComponent(name, consts.ContentColor)
 
 	return texts
 }
@@ -39,7 +43,7 @@ func newMessageContestTime(startTime, endTime time.Time) []linebot.TextComponent
 	texts := make([]linebot.TextComponent, 2)
 	contestTime := startTime.Format(consts.TimeFormat) + " - " + endTime.Format(consts.TimeFormat)
 	texts[0] = newTextComponent("Time", consts.TitleColor)
-	texts[1] = newTextComponent(contestTime, consts.ContentColor)
+	texts[1] = newTextContentComponent(contestTime, consts.ContentColor)
 
 	return texts
 }
@@ -47,7 +51,7 @@ func newMessageContestTime(startTime, endTime time.Time) []linebot.TextComponent
 func newMessageContestRange(ratedRange string) []linebot.TextComponent {
 	texts := make([]linebot.TextComponent, 2)
 	texts[0] = newTextComponent("Range", consts.TitleColor)
-	texts[1] = newTextComponent(ratedRange, consts.ContentColor)
+	texts[1] = newTextContentComponent(ratedRange, consts.ContentColor)
 
 	return texts
 }
@@ -63,12 +67,34 @@ func newFlexComponent(boxes []*linebot.BoxComponent) []linebot.FlexComponent {
 }
 
 func newTextComponent(text string, color string) linebot.TextComponent {
+	flex := 1
 	return linebot.TextComponent{
-		Type:       linebot.FlexComponentTypeText,
-		Text:       text,
-		AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
-		Size:       linebot.FlexTextSizeTypeSm,
-		Color:      color,
+		Type:  linebot.FlexComponentTypeText,
+		Text:  text,
+		Size:  linebot.FlexTextSizeTypeSm,
+		Color: color,
+		Flex:  &flex,
+	}
+}
+
+func newTextContentComponent(text string, color string) linebot.TextComponent {
+	flex := 5
+	return linebot.TextComponent{
+		Type:  linebot.FlexComponentTypeText,
+		Text:  text,
+		Size:  linebot.FlexTextSizeTypeSm,
+		Color: color,
+		Flex:  &flex,
+		Wrap:  true,
+	}
+}
+
+func newTextPlatform(text string) linebot.FlexComponent {
+	return &linebot.TextComponent{
+		Type:   linebot.FlexComponentTypeText,
+		Text:   text,
+		Size:   linebot.FlexTextSizeTypeXl,
+		Weight: linebot.FlexTextWeightTypeBold,
 	}
 }
 
@@ -77,8 +103,10 @@ func newHorizontalBoxComponent(texts []linebot.TextComponent) (*linebot.BoxCompo
 		return nil, xerrors.New("The length of texts should be 2")
 	}
 	return &linebot.BoxComponent{
-		Type:   linebot.FlexComponentTypeBox,
-		Layout: linebot.FlexBoxLayoutTypeHorizontal,
+		Type:    linebot.FlexComponentTypeBox,
+		Layout:  linebot.FlexBoxLayoutTypeBaseline,
+		Margin:  linebot.FlexComponentMarginTypeLg,
+		Spacing: linebot.FlexComponentSpacingTypeSm,
 		Contents: []linebot.FlexComponent{
 			&texts[0],
 			&texts[1],

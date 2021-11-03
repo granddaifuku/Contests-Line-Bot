@@ -11,6 +11,7 @@ import (
 func TestLoadEnv(t *testing.T) {
 	// Success Pattern
 	want := &Env{
+		Host:          "localhost",
 		UserName:      "postgres",
 		Password:      "password",
 		Port:          "5432",

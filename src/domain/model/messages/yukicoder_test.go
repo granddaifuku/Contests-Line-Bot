@@ -11,6 +11,8 @@ import (
 )
 
 func TestNewYukicoderMessage(t *testing.T) {
+	flex1 := 1
+	flex5 := 5
 	jst := time.FixedZone("Azia/Tokyo", 9*60*60)
 	arg := domain.YukicoderInfo{
 		Name:      "Yukicoder Contest 999",
@@ -22,43 +24,49 @@ func TestNewYukicoderMessage(t *testing.T) {
 		Layout: linebot.FlexBoxLayoutTypeVertical,
 		Contents: []linebot.FlexComponent{
 			&linebot.BoxComponent{
-				Type:   linebot.FlexComponentTypeBox,
-				Layout: linebot.FlexBoxLayoutTypeHorizontal,
+				Type:    linebot.FlexComponentTypeBox,
+				Layout:  linebot.FlexBoxLayoutTypeBaseline,
+				Spacing: linebot.FlexComponentSpacingType(linebot.FlexSpacerSizeTypeSm),
+				Margin:  linebot.FlexComponentMarginTypeLg,
 				Contents: []linebot.FlexComponent{
 					&linebot.TextComponent{
-						Type:       linebot.FlexComponentTypeText,
-						Text:       "Name",
-						AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
-						Size:       linebot.FlexTextSizeTypeSm,
-						Color:      "#aaaaaa",
+						Type:  linebot.FlexComponentTypeText,
+						Text:  "Name",
+						Size:  linebot.FlexTextSizeTypeSm,
+						Color: "#aaaaaa",
+						Flex:  &flex1,
 					},
 					&linebot.TextComponent{
-						Type:       linebot.FlexComponentTypeText,
-						Text:       "Yukicoder Contest 999",
-						AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
-						Size:       linebot.FlexTextSizeTypeSm,
-						Color:      "#666666",
+						Type:  linebot.FlexComponentTypeText,
+						Text:  "Yukicoder Contest 999",
+						Size:  linebot.FlexTextSizeTypeSm,
+						Color: "#666666",
+						Wrap:  true,
+						Flex:  &flex5,
 					},
 				},
 			},
 
 			&linebot.BoxComponent{
-				Type:   linebot.FlexComponentTypeBox,
-				Layout: linebot.FlexBoxLayoutTypeHorizontal,
+				Type:    linebot.FlexComponentTypeBox,
+				Layout:  linebot.FlexBoxLayoutTypeBaseline,
+				Spacing: linebot.FlexComponentSpacingType(linebot.FlexSpacerSizeTypeSm),
+				Margin:  linebot.FlexComponentMarginTypeLg,
 				Contents: []linebot.FlexComponent{
 					&linebot.TextComponent{
-						Type:       linebot.FlexComponentTypeText,
-						Text:       "Time",
-						AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
-						Size:       linebot.FlexTextSizeTypeSm,
-						Color:      "#aaaaaa",
+						Type:  linebot.FlexComponentTypeText,
+						Text:  "Time",
+						Size:  linebot.FlexTextSizeTypeSm,
+						Color: "#aaaaaa",
+						Flex:  &flex1,
 					},
 					&linebot.TextComponent{
-						Type:       linebot.FlexComponentTypeText,
-						Text:       "2021-12-30 21:00:00 - 2021-12-30 22:40:00",
-						AdjustMode: linebot.FlexComponentAdjustModeTypeShrinkToFit,
-						Size:       linebot.FlexTextSizeTypeSm,
-						Color:      "#666666",
+						Type:  linebot.FlexComponentTypeText,
+						Text:  "2021-12-30 21:00:00 - 2021-12-30 22:40:00",
+						Size:  linebot.FlexTextSizeTypeSm,
+						Color: "#666666",
+						Wrap:  true,
+						Flex:  &flex5,
 					},
 				},
 			},
