@@ -38,7 +38,7 @@ jobs:
 
       - name: Test code
         env:
-          "DB_HOST": "postgres"
+          "DB_HOST": "localhost"
           "DB_USER_NAME": "postgres"
           "DB_PASSWORD": "password"
           "DB_PORT": "5432"
