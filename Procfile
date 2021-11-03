@@ -1,1 +1,1 @@
-web: python src/main.py
+web: bin/Contest-Line-Bot

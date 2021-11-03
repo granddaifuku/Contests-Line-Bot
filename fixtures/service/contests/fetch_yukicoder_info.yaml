@@ -1,0 +1,51 @@
+---
+version: 1
+interactions:
+- request:
+    body: ""
+    form: {}
+    headers: {}
+    url: https://yukicoder.me/api/v1/contest/future
+    method: GET
+  response:
+    body: '[{"Id":351,"Name":"yukicoder contest","Date":"2021-10-01T21:20:00+09:00","EndDate":"2021-10-01T23:20:00+09:00","ProblemIdList":[5196,6643,5360,6641,5174,6876,5064]},{"Id":353,"Name":"yukicoder
+      contest","Date":"2021-10-08T21:20:00+09:00","EndDate":"2021-10-08T23:20:00+09:00","ProblemIdList":[6993,6992,5971,6998,6929,6985,6990]},{"Id":354,"Name":"yukicoder
+      contest","Date":"2021-10-15T21:20:00+09:00","EndDate":"2021-10-15T23:20:00+09:00","ProblemIdList":[6832,5205,6545,5582,6803,6045]},{"Id":355,"Name":"yukicoder
+      contest","Date":"2021-10-22T21:20:00+09:00","EndDate":"2021-10-22T23:20:00+09:00","ProblemIdList":[7017,6579,6932,6619,6569,7010,7031]},{"Id":352,"Name":"yukicoder
+      contest","Date":"2021-10-29T21:20:00+09:00","EndDate":"2021-10-29T23:20:00+09:00","ProblemIdList":[7019,6957,5208,4974,5339,6065,6879,6353]},{"Id":356,"Name":"yukicoder
+      contest （オムニバス 6問程度問題募集中）","Date":"2021-11-05T21:20:00+09:00","EndDate":"2021-11-05T23:20:00+09:00","ProblemIdList":[7063]}]'
+    headers:
+      Access-Control-Allow-Credentials:
+      - "true"
+      Access-Control-Allow-Headers:
+      - Content-Type,AccessToken,X-CSRFToken, Authorization
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, DELETE, PATCH
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers,
+        Content-Type
+      Alt-Svc:
+      - clear
+      Content-Length:
+      - "1003"
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Tue, 28 Sep 2021 06:38:49 GMT
+      Set-Cookie:
+      - REVEL_FLASH=; Path=/; HttpOnly
+      - REVEL_SESSION=3c041154f25575d502b34cb3e59ba498455dcff3-%00_TS%3A1635403129%00%00csrf_token%3A430936ea98800c9ea226b593d4c7b68d87b0809a2719b6dedb29ca21e4e6f0b0%00;
+        Path=/; Expires=Thu, 28 Oct 2021 06:38:49 GMT; Max-Age=2592000; HttpOnly
+      Via:
+      - 1.1 google
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+    status: 200 OK
+    code: 200
+    duration: 312.5409ms
