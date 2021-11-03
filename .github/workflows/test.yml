@@ -38,8 +38,11 @@ jobs:
 
       - name: Test code
         env:
+          "DB_HOST": "postgres"
           "DB_USER_NAME": "postgres"
           "DB_PASSWORD": "password"
           "DB_PORT": "5432"
           "DB_NAME": "test"
+          "LINE_CHANNEL_SECRET": "dummy_channel_secret"
+          "LINE_CHANNEL_TOKEN": "dummy_channel_token"
         run: go test -v ./...
