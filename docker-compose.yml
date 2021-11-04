@@ -9,6 +9,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
       POSTGRES_DB: test
+      TZ: Asia/Tokyo
     volumes:
       - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql
   server:
