@@ -3,6 +3,7 @@ package service
 import (
 	"bytes"
 	"context"
+	"sort"
 	"strings"
 	"unicode"
 
@@ -88,6 +89,8 @@ func (cs *crawlerService) FetchCodeforcesInfo(ctx context.Context) ([]domain.Cod
 		cf := domain.NewCodeforcesInfo(&res)
 		info = append(info, cf)
 	}
+	// Make Codeforces information ascending order
+	sort.SliceStable(info, func(i, j int) bool { return info[i].StartTime.Before(info[j].StartTime) })
 
 	return info, nil
 }
