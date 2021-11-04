@@ -9,7 +9,7 @@ import (
 	"golang.org/x/xerrors"
 )
 
-var jst = time.FixedZone("Azia/Tokyo", 9*60*60)
+var jst = time.FixedZone("Asia/Tokyo", 9*60*60)
 
 type AtcoderInfo struct {
 	Name       string
