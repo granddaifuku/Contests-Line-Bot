@@ -19,9 +19,6 @@ services:
     ports:
       - "8080:8080"
     environment:
-      DB_USER_NAME: "postgres"
-      DB_PASSWORD: "password"
-      DB_PORT: 5432
-      DB_NAME: "test"
+      DB_URL: "postgresql://localhost:5432/test?user=postgres&password=password"
     links:
       - "db"
