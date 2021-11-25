@@ -21,11 +21,11 @@ var jst = time.FixedZone("Azia/Tokyo", 9*60*60)
 
 func TestNewConn(t *testing.T) {
 	// The case failed to load envs
-	os.Unsetenv("DB_USER_NAME")
+	os.Unsetenv("DB_URL")
 	_, err := newConn()
 	assert.Error(t, err)
 
-	os.Setenv("DB_USER_NAME", "postgres")
+	os.Setenv("DB_URL", "postgresql://localhost:5432/test?user=postgres&password=password")
 
 	// The case success
 	conn, err := newConn()

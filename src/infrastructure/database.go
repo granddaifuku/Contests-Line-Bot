@@ -36,8 +36,8 @@ func newConn() (*sql.DB, error) {
 	if err != nil {
 		return nil, xerrors.Errorf("Error when Loading Envs: %w", err)
 	}
-	dbInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=require", env.Host, env.Port, env.UserName, env.Password, env.Name)
-	db, err := sql.Open("postgres", dbInfo)
+
+	db, err := sql.Open("postgres", env.URL)
 	if err != nil {
 		return nil, xerrors.Errorf("Error when Connecting DB: %w", err)
 	}

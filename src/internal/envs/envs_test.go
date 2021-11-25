@@ -11,11 +11,7 @@ import (
 func TestLoadEnv(t *testing.T) {
 	// Success Pattern
 	want := &Env{
-		Host:          "localhost",
-		UserName:      "postgres",
-		Password:      "password",
-		Port:          "5432",
-		Name:          "test",
+		URL:           "postgresql://localhost:5432/test?user=postgres&password=password",
 		ChannelSecret: "dummy_channel_secret",
 		ChannelToken:  "dummy_channel_token",
 	}
@@ -26,7 +22,7 @@ func TestLoadEnv(t *testing.T) {
 	}
 
 	// When the environmental variable lacks
-	os.Unsetenv("DB_USER_NAME")
+	os.Unsetenv("DB_URL")
 	got, err = LoadEnv()
 	assert.Error(t, err)
 }
