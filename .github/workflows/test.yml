@@ -37,8 +37,4 @@ jobs:
         run: go get -v -t -d ./...
 
       - name: Test code
-        # env:
-        #   "DB_URL": "postgresql://localhost:5432/test?user=postgres&password=password"
-        #   "LINE_CHANNEL_SECRET": "dummy_channel_secret"
-        #   "LINE_CHANNEL_TOKEN": "dummy_channel_token"
-        run: source ./src/tests/env.sh && go test -v ./...
+        run: source ./src/tests/envs.sh && go test -v ./...
