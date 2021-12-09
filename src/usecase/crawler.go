@@ -48,7 +48,10 @@ func (cu *crawlerUsecase) Crawl(
 	}
 
 	// Clear Table
-	cu.dr.ClearTables(ctx)
+	err = cu.dr.ClearTables(ctx)
+	if err != nil {
+		return xerrors.Errorf("Error when Clearing Tables: %w", err)
+	}
 
 	// Insert
 	for _, info := range atc {
