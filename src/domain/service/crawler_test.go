@@ -191,7 +191,7 @@ func TestFetchYukicoderInfo(t *testing.T) {
 		log.Fatal(err)
 	}
 	defer r.Stop() // nolint: errcheck
-		want := []domain.YukicoderInfo{
+	want := []domain.YukicoderInfo{
 		{
 			Name:      "yukicoder contest",
 			StartTime: time.Date(2021, 10, 1, 21, 20, 0, 0, jst),
