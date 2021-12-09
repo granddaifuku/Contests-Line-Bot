@@ -372,6 +372,9 @@ func execFile(conn *sql.DB, fileName string) {
 	}
 
 	_, err = conn.Exec(string(query))
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 // Reset table for the next test
@@ -446,6 +449,9 @@ func TestResetTable(t *testing.T) {
 	endTime := time.Now()
 	ratedRange := " ~ 1999"
 	_, err = db.Query("INSERT INTO atcoder(name, start_time, end_time, range) VALUES($1, $2, $3, $4)", name, startTime, endTime, ratedRange)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	// Check the data is correctly inserted
 	var count int
@@ -477,6 +483,9 @@ func TestSelectRows(t *testing.T) {
 	endTime := time.Now()
 	ratedRange := " ~ 1999"
 	_, err = db.Query("INSERT INTO atcoder(name, start_time, end_time, range) VALUES($1, $2, $3, $4)", name, startTime, endTime, ratedRange)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	assert.NotNil(t, selectRows(db, "atcoder"))
 
@@ -499,6 +508,9 @@ func TestCountRows(t *testing.T) {
 	endTime := time.Now()
 	ratedRange := " ~ 1999"
 	_, err = db.Query("INSERT INTO atcoder(name, start_time, end_time, range) VALUES($1, $2, $3, $4)", name, startTime, endTime, ratedRange)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	assert.Equal(t, 1, countRows(db, "atcoder"))
 

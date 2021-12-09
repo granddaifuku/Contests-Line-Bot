@@ -22,7 +22,7 @@ func TestFetchAtcoderInfo(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer r.Stop()
+	defer r.Stop() // nolint: errcheck
 	want := []domain.AtcoderInfo{
 		{
 			Name:       "AtCoder Beginner Contest 221",
@@ -75,7 +75,7 @@ func TestFetchCodeforcesInfo(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer r.Stop()
+	defer r.Stop() // nolint: errcheck
 	want := []domain.CodeforcesInfo{
 		{
 			Name:      "Codeforces Round #744 (Div. 3)",
@@ -190,8 +190,8 @@ func TestFetchYukicoderInfo(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer r.Stop()
-	want := []domain.YukicoderInfo{
+	defer r.Stop() // nolint: errcheck
+		want := []domain.YukicoderInfo{
 		{
 			Name:      "yukicoder contest",
 			StartTime: time.Date(2021, 10, 1, 21, 20, 0, 0, jst),

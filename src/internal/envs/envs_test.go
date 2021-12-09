@@ -23,6 +23,6 @@ func TestLoadEnv(t *testing.T) {
 
 	// When the environmental variable lacks
 	os.Unsetenv("DB_URL")
-	got, err = LoadEnv()
+	_, err = LoadEnv()
 	assert.Error(t, err)
 }
