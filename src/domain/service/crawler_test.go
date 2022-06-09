@@ -25,40 +25,40 @@ func TestFetchAtcoderInfo(t *testing.T) {
 	defer r.Stop() // nolint: errcheck
 	want := []domain.AtcoderInfo{
 		{
-			Name:       "AtCoder Beginner Contest 221",
-			StartTime:  time.Date(2021, 10, 2, 21, 0, 0, 0, jst),
-			EndTime:    time.Date(2021, 10, 2, 22, 40, 0, 0, jst),
+			Name:       "Ⓐ エイシングプログラミングコンテスト2022（AtCoder Beginner Contest 255）",
+			StartTime:  time.Date(2022, 6, 11, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2022, 6, 11, 22, 40, 0, 0, jst),
 			RatedRange: " ~ 1999",
 		},
 		{
-			Name:       "エクサウィザーズプログラミングコンテスト2021（AtCoder Beginner Contest 222）",
-			StartTime:  time.Date(2021, 10, 9, 21, 0, 0, 0, jst),
-			EndTime:    time.Date(2021, 10, 9, 22, 40, 0, 0, jst),
+			Name:       "Ⓐ 東京海上日動プログラミングコンテスト2022（AtCoder Beginner Contest 256）",
+			StartTime:  time.Date(2022, 6, 18, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2022, 6, 18, 22, 40, 0, 0, jst),
 			RatedRange: " ~ 1999",
 		},
 		{
-			Name:       "デジタルの日特別イベント「HACK TO THE FUTURE for Youth+」",
-			StartTime:  time.Date(2021, 10, 10, 13, 30, 0, 0, jst),
-			EndTime:    time.Date(2021, 10, 10, 17, 30, 0, 0, jst),
-			RatedRange: "-",
-		},
-		{
-			Name:       "デジタルの日特別イベント「HACK TO THE FUTURE for Youth+」 open",
-			StartTime:  time.Date(2021, 10, 10, 13, 30, 0, 0, jst),
-			EndTime:    time.Date(2021, 10, 10, 17, 30, 0, 0, jst),
-			RatedRange: "-",
-		},
-		{
-			Name:       "大和証券プログラミングコンテスト2021（AtCoder Regular Contest 128）",
-			StartTime:  time.Date(2021, 10, 16, 21, 0, 0, 0, jst),
-			EndTime:    time.Date(2021, 10, 16, 23, 0, 0, 0, jst),
+			Name:       "Ⓐ AtCoder Regular Contest 142",
+			StartTime:  time.Date(2022, 6, 19, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2022, 6, 19, 23, 0, 0, 0, jst),
 			RatedRange: " ~ 2799",
 		},
 		{
-			Name:       "AtCoder Grand Contest 055",
-			StartTime:  time.Date(2021, 10, 31, 21, 0, 0, 0, jst),
-			EndTime:    time.Date(2021, 10, 31, 23, 30, 0, 0, jst),
-			RatedRange: "1200 ~ ",
+			Name:       "Ⓐ 日鉄ソリューションズプログラミングコンテスト2022（AtCoder Beginner Contest 257）",
+			StartTime:  time.Date(2022, 6, 25, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2022, 6, 25, 22, 40, 0, 0, jst),
+			RatedRange: " ~ 1999",
+		},
+		{
+			Name:       "Ⓐ AtCoder Regular Contest 143",
+			StartTime:  time.Date(2022, 6, 26, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2022, 6, 26, 23, 0, 0, 0, jst),
+			RatedRange: " ~ 2799",
+		},
+		{
+			Name:       "Ⓐ AtCoder Beginner Contest 258",
+			StartTime:  time.Date(2022, 7, 2, 21, 0, 0, 0, jst),
+			EndTime:    time.Date(2022, 7, 2, 22, 40, 0, 0, jst),
+			RatedRange: " ~ 1999",
 		},
 	}
 	rr := infrastructure.NewRequestPersistence(&http.Client{Transport: r})

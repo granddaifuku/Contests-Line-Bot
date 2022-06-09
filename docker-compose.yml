@@ -21,4 +21,4 @@ services:
     environment:
       DB_URL: "postgresql://localhost:5432/test?user=postgres&password=password"
     links:
-      - "db"
+      - "postgres"

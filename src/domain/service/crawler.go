@@ -53,12 +53,12 @@ func (cs *crawlerService) FetchAtcoderInfo(ctx context.Context) ([]domain.Atcode
 	scraped := doc.Find("div#contest-table-upcoming > div.panel > div.table-responsive > table.table > tbody > tr").Text()
 
 	splited := cs.arrangeAtcoderInfo(scraped)
-	// Devide the slice every 4 elements.
-	for i := 0; i < len(splited); i += 4 {
+	// Devide the slice every 5 elements.
+	for i := 0; i < len(splited); i += 5 {
 		startTime := splited[i]
-		name := splited[i+1]
-		duration := splited[i+2]
-		ratedRange := splited[i+3]
+		name := splited[i+1] + " " + splited[i+2] // category + name
+		duration := splited[i+3]
+		ratedRange := splited[i+4]
 		at, err := domain.NewAtCoderInfo(name, startTime, duration, ratedRange)
 		if err != nil {
 			return nil, xerrors.Errorf("Error when Building AtCoder Info: %w", err)
