@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/granddaifuku/contest_line_bot/src/internal/consts"
-	"golang.org/x/xerrors"
+	"github.com/pkg/errors"
 )
 
 var jst = time.FixedZone("Asia/Tokyo", 9*60*60)
@@ -29,23 +29,23 @@ func NewAtCoderInfo(
 
 	// Delete the timezone suffix
 	if !strings.HasSuffix(start, tz) {
-		return *info, xerrors.New("Error Duration has No Timezone Suffix")
+		return *info, errors.New("Error Duration has No Timezone Suffix")
 	}
 	start = strings.TrimSuffix(start, tz)
 
 	startTime, err := time.ParseInLocation(consts.TimeFormat, start, jst)
 	if err != nil {
-		return *info, xerrors.Errorf("Error when Parsing Start Time: %w", err)
+		return *info, errors.WithStack(err)
 	}
 
 	dur := strings.Split(duration, ":") // Separate duration to hours and minutes
 	hours, err := strconv.Atoi(dur[0])
 	if err != nil {
-		return *info, xerrors.Errorf("Error when Converting String Hours to Int: %w", err)
+		return *info, errors.WithStack(err)
 	}
 	minutes, err := strconv.Atoi(dur[1])
 	if err != nil {
-		return *info, xerrors.Errorf("Error when Converting String Minutes to Int: %w", err)
+		return *info, errors.WithStack(err)
 	}
 	endTime := startTime.Add(time.Duration(hours)*time.Hour + time.Duration(minutes)*time.Minute)
 

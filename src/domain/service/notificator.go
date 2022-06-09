@@ -7,7 +7,6 @@ import (
 	messages "github.com/granddaifuku/contest_line_bot/src/domain/model/messages"
 	"github.com/granddaifuku/contest_line_bot/src/internal/consts"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	"golang.org/x/xerrors"
 )
 
 type NotificatorService interface {
@@ -38,7 +37,7 @@ func (ns *notificatorService) BuildMessages(
 	for i, info := range atc {
 		mes, err := messages.NewAtcoderMessage(info)
 		if err != nil {
-			return nil, xerrors.Errorf("Error when Creating AtCoder Message")
+			return nil, err
 		}
 		atcMsgs[i] = mes
 	}
@@ -46,7 +45,7 @@ func (ns *notificatorService) BuildMessages(
 	for i, info := range cdf {
 		mes, err := messages.NewCodeforcesMessage(info)
 		if err != nil {
-			return nil, xerrors.Errorf("Error when Creating Codeforces Message")
+			return nil, err
 		}
 		cdfMsgs[i] = mes
 	}
@@ -54,7 +53,7 @@ func (ns *notificatorService) BuildMessages(
 	for i, info := range ykc {
 		mes, err := messages.NewYukicoderMessage(info)
 		if err != nil {
-			return nil, xerrors.Errorf("Error when Creating Yukicoder Message")
+			return nil, err
 		}
 		ykcMsgs[i] = mes
 	}

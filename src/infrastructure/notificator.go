@@ -8,7 +8,7 @@ import (
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
 	"github.com/granddaifuku/contest_line_bot/src/internal/envs"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	"golang.org/x/xerrors"
+	"github.com/pkg/errors"
 )
 
 type notificatorPersistence struct {
@@ -48,7 +48,7 @@ func (np *notificatorPersistence) ExtractTokens(
 		}
 	}
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Parsing Request: %w", err)
+		return nil, errors.WithStack(err)
 	}
 
 	return tokens, nil
@@ -61,7 +61,7 @@ func (np *notificatorPersistence) Broadcast(
 	for _, msg := range msgs {
 		_, err := np.client.BroadcastMessage(msg).WithContext(ctx).Do()
 		if err != nil {
-			return xerrors.Errorf("Error when Broadcasting Messages: %w", err)
+			return errors.WithStack(err)
 		}
 	}
 
@@ -76,7 +76,7 @@ func (np *notificatorPersistence) Reply(
 	for _, msg := range msgs {
 		_, err := np.client.PushMessage(to, msg).WithContext(ctx).Do()
 		if err != nil {
-			return xerrors.Errorf("Error when Replying Messages: %w", err)
+			return errors.WithStack(err)
 		}
 	}
 

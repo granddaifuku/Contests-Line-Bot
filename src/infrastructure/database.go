@@ -6,11 +6,11 @@ import (
 	"fmt"
 
 	_ "github.com/lib/pq"
+	"github.com/pkg/errors"
 
 	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
 	"github.com/granddaifuku/contest_line_bot/src/internal/envs"
-	"golang.org/x/xerrors"
 )
 
 type databasePersistence struct {
@@ -34,12 +34,12 @@ func NewDatabasePersistence(conn *sql.DB) repository.DatabaseRepository {
 func newConn() (*sql.DB, error) {
 	env, err := envs.LoadEnv()
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Loading Envs: %w", err)
+		return nil, errors.WithStack(err)
 	}
 
 	db, err := sql.Open("postgres", env.URL)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Connecting DB: %w", err)
+		return nil, errors.WithStack(err)
 	}
 
 	return db, nil
@@ -51,7 +51,7 @@ func (dp *databasePersistence) InsertAtcoder(
 ) error {
 	_, err := dp.Conn.Exec("INSERT INTO atcoder(name, start_time, end_time, range) VALUES($1, $2, $3, $4)", info.Name, info.StartTime, info.EndTime, info.RatedRange)
 	if err != nil {
-		return xerrors.Errorf("Error when Executing Statement for Inserting AtCoder Information: %w", err)
+		return errors.WithStack(err)
 	}
 
 	return nil
@@ -63,7 +63,7 @@ func (dp *databasePersistence) InsertCodeforces(
 ) error {
 	_, err := dp.Conn.Exec("INSERT INTO codeforces(name, start_time, end_time) VALUES($1, $2, $3)", info.Name, info.StartTime, info.EndTime)
 	if err != nil {
-		return xerrors.Errorf("Error when Executing Statement for Inserting Codeforces Information: %w", err)
+		return errors.WithStack(err)
 	}
 
 	return nil
@@ -75,7 +75,7 @@ func (dp *databasePersistence) InsertYukicoder(
 ) error {
 	_, err := dp.Conn.Exec("INSERT INTO yukicoder(name, start_time, end_time) VALUES($1, $2, $3)", info.Name, info.StartTime, info.EndTime)
 	if err != nil {
-		return xerrors.Errorf("Error when Executing Statement for Inserting Yukicoder Information: %w", err)
+		return errors.WithStack(err)
 	}
 
 	return nil
@@ -89,7 +89,7 @@ func (dp *databasePersistence) BatchGet(
 	stmt := fmt.Sprintf("SELECT * FROM %s", platform)
 	rows, err := dp.Conn.Query(stmt)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Selecting Table: %w", err)
+		return nil, errors.WithStack(err)
 	}
 
 	return dp.convertRows(rows, platform)
@@ -108,7 +108,7 @@ func (dp *databasePersistence) ClearTables(
 		stmt := fmt.Sprintf("DELETE FROM %s", table)
 		_, err := dp.Conn.Exec(stmt)
 		if err != nil {
-			return xerrors.Errorf("Error when Deleting Table %s: %w", table, err)
+			return errors.WithStack(err)
 		}
 	}
 
@@ -128,21 +128,21 @@ func (dp *databasePersistence) convertRows(
 			tmp := domain.AtcoderInfo{}
 			err := rows.Scan(&id, &tmp.Name, &tmp.StartTime, &tmp.EndTime, &tmp.RatedRange)
 			if err != nil {
-				return nil, xerrors.Errorf("Error when Scanning Rows: %w", err)
+				return nil, errors.WithStack(err)
 			}
 			info = append(info, tmp)
 		case "Codeforces":
 			tmp := domain.CodeforcesInfo{}
 			err := rows.Scan(&id, &tmp.Name, &tmp.StartTime, &tmp.EndTime)
 			if err != nil {
-				return nil, xerrors.Errorf("Error when Scanning Rows: %w", err)
+				return nil, errors.WithStack(err)
 			}
 			info = append(info, tmp)
 		case "Yukicoder":
 			tmp := domain.YukicoderInfo{}
 			err := rows.Scan(&id, &tmp.Name, &tmp.StartTime, &tmp.EndTime)
 			if err != nil {
-				return nil, xerrors.Errorf("Error when Scanning Rows: %w", err)
+				return nil, errors.WithStack(err)
 			}
 			info = append(info, tmp)
 		}

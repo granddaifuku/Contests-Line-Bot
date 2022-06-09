@@ -11,7 +11,7 @@ import (
 	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
 	"github.com/granddaifuku/contest_line_bot/src/internal/consts"
-	"golang.org/x/xerrors"
+	"github.com/pkg/errors"
 )
 
 type CrawlerService interface {
@@ -40,13 +40,13 @@ func (cs *crawlerService) FetchAtcoderInfo(ctx context.Context) ([]domain.Atcode
 	info := make([]domain.AtcoderInfo, 0)
 	body, err := cs.rr.Get(ctx, consts.AtcoderURL)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Calling Api: %w", err)
+		return nil, err
 	}
 
 	// Scrape AtCoder's contests information
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(body))
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Reading Document: %w", err)
+		return nil, errors.WithStack(err)
 	}
 
 	// Dive into the upcoming contests inforamtion
@@ -61,7 +61,7 @@ func (cs *crawlerService) FetchAtcoderInfo(ctx context.Context) ([]domain.Atcode
 		ratedRange := splited[i+4]
 		at, err := domain.NewAtCoderInfo(name, startTime, duration, ratedRange)
 		if err != nil {
-			return nil, xerrors.Errorf("Error when Building AtCoder Info: %w", err)
+			return nil, err
 		}
 		info = append(info, at)
 	}
@@ -75,11 +75,11 @@ func (cs *crawlerService) FetchCodeforcesInfo(ctx context.Context) ([]domain.Cod
 	// Call Codeforces' contests information api
 	body, err := cs.rr.Get(ctx, consts.CodeforcesURL)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Calling Api: %w", err)
+		return nil, err
 	}
 	err = cs.rr.DecodeJson(body, &api)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Calling Decoding Function: %w", err)
+		return nil, err
 	}
 	for _, res := range api.Result {
 		// Only want future contests
@@ -100,11 +100,11 @@ func (cs *crawlerService) FetchYukicoderInfo(ctx context.Context) ([]domain.Yuki
 	// Call Yukicoder's future contests api
 	body, err := cs.rr.Get(ctx, consts.YukicoderURL)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Calling Api: %w", err)
+		return nil, err
 	}
 	err = cs.rr.DecodeJson(body, &info)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Calling Decoding Function: %w", err)
+		return nil, err
 	}
 
 	return info, nil
