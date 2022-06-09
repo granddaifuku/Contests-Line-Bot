@@ -2,7 +2,7 @@ package envs
 
 import (
 	"github.com/kelseyhightower/envconfig"
-	"golang.org/x/xerrors"
+	"github.com/pkg/errors"
 )
 
 type Env struct {
@@ -15,7 +15,7 @@ func LoadEnv() (*Env, error) {
 	var env Env
 	err := envconfig.Process("", &env)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Processing Envs: %w", err)
+		return nil, errors.WithStack(err)
 	}
 
 	return &env, nil
