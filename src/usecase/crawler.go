@@ -5,7 +5,6 @@ import (
 
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
 	"github.com/granddaifuku/contest_line_bot/src/domain/service"
-	"golang.org/x/xerrors"
 )
 
 type CrawlerUsecase interface {
@@ -36,40 +35,40 @@ func (cu *crawlerUsecase) Crawl(
 	// Fetch contests information
 	atc, err := cu.cs.FetchAtcoderInfo(ctx)
 	if err != nil {
-		return xerrors.Errorf("Error when Fetching AtCoder Information: %w", err)
+		return err
 	}
 	cdf, err := cu.cs.FetchCodeforcesInfo(ctx)
 	if err != nil {
-		return xerrors.Errorf("Error when Fetching Codeforces Information: %w", err)
+		return err
 	}
 	ykc, err := cu.cs.FetchYukicoderInfo(ctx)
 	if err != nil {
-		return xerrors.Errorf("Error when Fetching Yukicoder Information: %w", err)
+		return err
 	}
 
 	// Clear Table
 	err = cu.dr.ClearTables(ctx)
 	if err != nil {
-		return xerrors.Errorf("Error when Clearing Tables: %w", err)
+		return err
 	}
 
 	// Insert
 	for _, info := range atc {
 		err = cu.dr.InsertAtcoder(ctx, info)
 		if err != nil {
-			return xerrors.Errorf("Error when Inserting AtCoder Table: %w", err)
+			return err
 		}
 	}
 	for _, info := range cdf {
 		err = cu.dr.InsertCodeforces(ctx, info)
 		if err != nil {
-			return xerrors.Errorf("Error when Inserting Codeforces Table: %w", err)
+			return err
 		}
 	}
 	for _, info := range ykc {
 		err = cu.dr.InsertYukicoder(ctx, info)
 		if err != nil {
-			return xerrors.Errorf("Error when Inserting Yukicoder Table: %w", err)
+			return err
 		}
 	}
 

@@ -2,12 +2,12 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/granddaifuku/contest_line_bot/src/domain/repository"
 	"github.com/granddaifuku/contest_line_bot/src/domain/service"
-	"golang.org/x/xerrors"
 )
 
 type NotificatorUsecase interface {
@@ -59,22 +59,22 @@ func (nu *notificatorUsecase) Reply(
 	// Get information from the database
 	atcInfo, err := nu.dr.BatchGet(ctx, "AtCoder")
 	if err != nil {
-		return xerrors.Errorf("Error when Selecting AtCoder Database: %w", err)
+		return err
 	}
 	cdfInfo, err := nu.dr.BatchGet(ctx, "Codeforces")
 	if err != nil {
-		return xerrors.Errorf("Error when Selecting Codeforces Database: %w", err)
+		return err
 	}
 	ykcInfo, err := nu.dr.BatchGet(ctx, "Yukicoder")
 	if err != nil {
-		return xerrors.Errorf("Error when Selecting Yukicoder Database: %w", err)
+		return err
 	}
 
 	atc := make([]domain.AtcoderInfo, len(atcInfo))
 	for i := range atcInfo {
 		info, ok := atcInfo[i].(domain.AtcoderInfo)
 		if !ok {
-			return xerrors.New("Failed to Cast AtCoder Info")
+			return errors.New("Failed to Cast AtCoder Info")
 		}
 		atc[i] = info
 	}
@@ -82,7 +82,7 @@ func (nu *notificatorUsecase) Reply(
 	for i := range cdfInfo {
 		info, ok := cdfInfo[i].(domain.CodeforcesInfo)
 		if !ok {
-			return xerrors.New("Failed to Cast Codeforces Info")
+			return errors.New("Failed to Cast Codeforces Info")
 		}
 		cdf[i] = info
 	}
@@ -90,7 +90,7 @@ func (nu *notificatorUsecase) Reply(
 	for i := range ykcInfo {
 		info, ok := ykcInfo[i].(domain.YukicoderInfo)
 		if !ok {
-			return xerrors.New("Failed to Cast Yukicoder Info")
+			return errors.New("Failed to Cast Yukicoder Info")
 		}
 		ykc[i] = info
 	}
@@ -98,14 +98,14 @@ func (nu *notificatorUsecase) Reply(
 	// Convert information to messages
 	msgs, err := nu.ns.BuildMessages(ctx, atc, cdf, ykc)
 	if err != nil {
-		return xerrors.Errorf("Error when Calling BuildMessages Function: %w", err)
+		return err
 	}
 
 	// Reply
 	for _, token := range tokens {
 		err = nu.nr.Reply(ctx, token, msgs)
 		if err != nil {
-			return xerrors.Errorf("Error when Calling Reply Function: %w", err)
+			return err
 		}
 	}
 
@@ -118,22 +118,22 @@ func (nu *notificatorUsecase) Broadcast(
 	// Get information from the database
 	atcInfo, err := nu.dr.BatchGet(ctx, "AtCoder")
 	if err != nil {
-		return xerrors.Errorf("Error when Selecting AtCoder Database: %w", err)
+		return err
 	}
 	cdfInfo, err := nu.dr.BatchGet(ctx, "Codeforces")
 	if err != nil {
-		return xerrors.Errorf("Error when Selecting Codeforces Database: %w", err)
+		return err
 	}
 	ykcInfo, err := nu.dr.BatchGet(ctx, "Yukicoder")
 	if err != nil {
-		return xerrors.Errorf("Error when Selecting Yukicoder Database: %w", err)
+		return err
 	}
 
 	atc := make([]domain.AtcoderInfo, len(atcInfo))
 	for i := range atcInfo {
 		info, ok := atcInfo[i].(domain.AtcoderInfo)
 		if !ok {
-			return xerrors.New("Failed to Cast AtCoder Info")
+			return errors.New("Failed to Cast AtCoder Info")
 		}
 		atc[i] = info
 	}
@@ -141,7 +141,7 @@ func (nu *notificatorUsecase) Broadcast(
 	for i := range cdfInfo {
 		info, ok := cdfInfo[i].(domain.CodeforcesInfo)
 		if !ok {
-			return xerrors.New("Failed to Cast Codeforces Info")
+			return errors.New("Failed to Cast Codeforces Info")
 		}
 		cdf[i] = info
 	}
@@ -149,7 +149,7 @@ func (nu *notificatorUsecase) Broadcast(
 	for i := range ykcInfo {
 		info, ok := atcInfo[i].(domain.YukicoderInfo)
 		if !ok {
-			return xerrors.New("Failed to Cast Yukicoder Info")
+			return errors.New("Failed to Cast Yukicoder Info")
 		}
 		ykc[i] = info
 	}
@@ -157,13 +157,13 @@ func (nu *notificatorUsecase) Broadcast(
 	// Convert information to messages
 	msgs, err := nu.ns.BuildMessages(ctx, atc, cdf, ykc)
 	if err != nil {
-		return xerrors.Errorf("Error when Calling BuildMessages Function: %w", err)
+		return err
 	}
 
 	// Reply
 	err = nu.nr.Broadcast(ctx, msgs)
 	if err != nil {
-		return xerrors.Errorf("Error when Calling Broadcast Function: %w", err)
+		return err
 	}
 
 	return nil
