@@ -3,7 +3,6 @@ package messages
 import (
 	domain "github.com/granddaifuku/contest_line_bot/src/domain/model/contests"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	"golang.org/x/xerrors"
 )
 
 func NewYukicoderMessage(info domain.YukicoderInfo) (*linebot.BoxComponent, error) {
@@ -11,11 +10,11 @@ func NewYukicoderMessage(info domain.YukicoderInfo) (*linebot.BoxComponent, erro
 	timeInfo := newMessageContestTime(info.StartTime, info.EndTime)
 	nameBox, err := newHorizontalBoxComponent(nameInfo)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Building Name Box Component: %w", err)
+		return nil, err
 	}
 	timeBox, err := newHorizontalBoxComponent(timeInfo)
 	if err != nil {
-		return nil, xerrors.Errorf("Error when Building Time Box Component: %w", err)
+		return nil, err
 	}
 	return &linebot.BoxComponent{
 		Type:   linebot.FlexComponentTypeBox,

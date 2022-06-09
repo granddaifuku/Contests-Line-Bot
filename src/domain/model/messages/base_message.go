@@ -5,7 +5,7 @@ import (
 
 	"github.com/granddaifuku/contest_line_bot/src/internal/consts"
 	"github.com/line/line-bot-sdk-go/v7/linebot"
-	"golang.org/x/xerrors"
+	"github.com/pkg/errors"
 )
 
 func NewMessage(contents []*linebot.BoxComponent, platform string) *linebot.FlexMessage {
@@ -100,7 +100,7 @@ func newTextPlatform(text string) linebot.FlexComponent {
 
 func newHorizontalBoxComponent(texts []linebot.TextComponent) (*linebot.BoxComponent, error) {
 	if len(texts) != 2 {
-		return nil, xerrors.New("The length of texts should be 2")
+		return nil, errors.New("The length of texts should be 2")
 	}
 	return &linebot.BoxComponent{
 		Type:    linebot.FlexComponentTypeBox,
