@@ -1,6 +1,6 @@
 # Competitive Programming Information Bot
 
-[![Heroku](https://heroku-badge.herokuapp.com/?app=heroku-badge)]
+[![Heroku](https://heroku-badge.herokuapp.com/?app=contest-line-bot)]()
 [![CI](https://github.com/granddaifuku/Contest-Line-Bot/actions/workflows/test.yml/badge.svg)](https://github.com/granddaifuku/Contests-Line-Bot/actions)
 
 ## About
