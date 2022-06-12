@@ -1,6 +1,6 @@
 # Competitive Programming Information Bot
 
-[![CI](https://github.com/granddaifuku/Contests-Line-Bot/actions/workflows/CI/badge.svg)](https://github.com/granddaifuku/Contests-Line-Bot/actions)
+![CI](https://github.com/granddaifuku/Contests-Line-Bot/actions/workflows/test.yml/badge.svg)
 
 ## About
 This is the [Line](https://line.me/ja/) bot that informs you about the [AtCoder](https://atcoder.jp/?lang=ja) and [Codeforces](https://codeforces.com/), [yukicoder](https://yukicoder.me/) contests.
